@@ -5,8 +5,12 @@
 package DataLayer.DataAccessObjects.Sqlite;
 
 import BusinessObjects.IEmailKontakt;
+import DataLayer.BusinessObjects.EmailKontakt;
 import DataLayer.DataAccessObjects.IEmailKontaktDAO;
+
+import java.io.Console;
 import java.sql.*;
+import java.util.LinkedList;
 
 /**
  *
@@ -14,9 +18,11 @@ import java.sql.*;
  */
 public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 
-	public void Init(){
+	public void Init() throws SQLException{
+		
+		Connection conn = null;
 		try{
-		    Connection conn = getConnection();
+		    conn = getConnection();
 		    Statement stat = conn.createStatement();
 		    stat.executeUpdate("CREATE TABLE kontakte(id integer primary key, vorname, nachname, email);");
 		    PreparedStatement stmt = conn.prepareStatement("insert into kontakte values (null, ?, ?, ?);");
@@ -29,7 +35,12 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
             stmt.execute();
 		    
 		    conn.commit();
-		    conn.close();
+		}
+		catch(Exception ex){
+			System.out.println(ex.toString());
+		}
+		finally{
+			conn.close();
 		}
 	}
 	
@@ -38,14 +49,16 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 		String user = "master";
 		String pw = "1234";
 		
+		Connection conn = null;
+		
 		try{
 			Class.forName("org.sqlite.JDBC");
-		    return DriverManager.getConnection("jdbc:sqlite:test.db");
+		    conn = DriverManager.getConnection(connstr, user, pw);
 		}
-		catch(SQLException ex){
-			
+		catch(Exception ex){
+			System.out.println(ex.toString());
 		}
-		
+		return conn;
 	}
 	
 	
@@ -56,19 +69,46 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 
     @Override
     public IEmailKontakt[] select() {
-    	ResultSet rs = stat.executeQuery("select * from people;");
-    	while (rs.next())
-	    {
-	      System.out.println("name = " + rs.getString("name"));
-	      System.out.println("job = " + rs.getString("occupation"));
-	    }
-	    rs.close();*/
-        throw new UnsupportedOperationException("Not supported yet.");
+    	Statement stmt;
+    	ResultSet rs;
+    	
+    	LinkedList<EmailKontakt> kontakte = new LinkedList<EmailKontakt>();
+		try {
+			stmt = getConnection().createStatement();
+			rs = stmt.executeQuery("SELECT * FROM kontakte;");
+			while (rs.next()){
+	    		kontakte.add(new EmailKontakt(rs.getInt("id"), rs.getString("vorname"), 
+	    							rs.getString("nachname"), rs.getString("email")));
+	    	}
+		    rs.close();
+	    	
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return (IEmailKontakt[]) kontakte.toArray();
     }
 
     @Override
     public IEmailKontakt select(int id) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    	Statement stmt;
+    	ResultSet rs;
+    	
+    	LinkedList<EmailKontakt> kontakte = new LinkedList<EmailKontakt>();
+		try {
+			stmt = getConnection().createStatement();
+			rs = stmt.executeQuery("SELECT * FROM kontakte WHERE id = " + id);
+			while (rs.next()){
+	    		kontakte.add(new EmailKontakt(rs.getInt("id"), rs.getString("vorname"), 
+	    							rs.getString("nachname"), rs.getString("email")));
+	    	}
+		    rs.close();
+	    	
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return (IEmailKontakt[]) kontakte.toArray();
     }
 
     @Override

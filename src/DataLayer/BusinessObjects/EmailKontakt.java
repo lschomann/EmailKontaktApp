@@ -12,6 +12,13 @@ public class EmailKontakt implements BusinessObjects.IEmailKontakt{
     private int id;
     private String vorname, nachname, email;
     
+    public EmailKontakt(int id, String vorname, String nachname, String email){
+    	setId(id);
+    	setVorname(vorname);
+    	setNachname(nachname);
+    	setEmail(email);
+    }
+    
     public void setID(int id){
         
     }
