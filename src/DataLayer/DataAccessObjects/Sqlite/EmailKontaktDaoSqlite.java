@@ -166,11 +166,17 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 	
     @Override
     public IEmailKontakt first() throws NoEmailKontaktFoundException {
-		throw new UnsupportedOperationException("Not supported yet.");
+		IEmailKontakt[] objs = selectBase(null, "id ASC", 1);
+		
+		if (objs.length < 1){
+			throw new NoEmailKontaktFoundException();
+		}
+		
+		return objs[0];
     }
 
     @Override
-    public IEmailKontakt last() {
+    public IEmailKontakt last() throws NoEmailKontaktFoundException{
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
