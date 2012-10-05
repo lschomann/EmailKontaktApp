@@ -196,8 +196,16 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
     }
 
     @Override
-    public void delete(IEmailKontakt emailKontakt) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void delete(IEmailKontakt emailKontakt){
+        try{
+			PreparedStatement stmt = getConnection().prepareStatement(
+				"DELETE FROM kontakte WHERE id = " + Integer.toString(emailKontakt.getID())
+			);
+			stmt.executeUpdate();
+		}
+		catch(SQLException ex){
+			ex.printStackTrace();
+		}
     }
 
     @Override
