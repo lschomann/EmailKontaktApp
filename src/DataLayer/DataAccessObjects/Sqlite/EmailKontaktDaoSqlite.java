@@ -13,6 +13,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.DriverManager;
 
 import java.util.LinkedList;
 import java.util.AbstractMap;
@@ -80,24 +81,33 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 		LinkedList<AbstractMap.SimpleEntry<String, Object>> params = 
 			new LinkedList<AbstractMap.SimpleEntry<String, Object>>();
 		params.add(param);
-		return selectBase((AbstractMap.SimpleEntry[]) params.toArray());
+		return selectBase((AbstractMap.SimpleEntry[]) params.toArray(), "", 0);
 	}
-
+	
 	/**
 	 * 
 	 * @author Malte Engelhardt
 	 * @param params
-	 * @return 
+	 * @param orderBy
+	 * @param limit
+	 * @return Array of objects that implement IEmailKontakt.
 	 * 
 	 */
-    private IEmailKontakt[] selectBase(AbstractMap.SimpleEntry<String, Object>[] params){
+    private IEmailKontakt[] selectBase(AbstractMap.SimpleEntry<String, Object>[] params
+										, String orderBy
+										, int limit){
+		
 		PreparedStatement stmt;
 		ResultSet rs;
     	
 		LinkedList<IEmailKontakt> objs = new LinkedList<IEmailKontakt>();
 		try {
+			String where = getWhereString(params);
 			stmt = getConnection().prepareStatement(
-				"SELECT id, vorname, nachname, email FROM kontakte WHERE " + getWhereString(params)
+				"SELECT id, vorname, nachname, email FROM kontakte" 
+				+ (where.equals("") ? "" : " WHERE " + where)
+				+ (orderBy.equals("") ? "" : " ORDER BY " + orderBy)
+				+ (limit == 0 ? "" : " LIMIT " + Integer.toString(limit))
 			);
 			for(int i = 0; i < params.length; i++){
 				stmt.setObject(i + 1, params[i]);
@@ -118,7 +128,11 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
     }
     
     private String getWhereString(AbstractMap.SimpleEntry<String, Object>[] params){
-        StringBuilder sb = new StringBuilder();
+        if (params == null){
+			return "";
+		}
+		
+		StringBuilder sb = new StringBuilder();
         
         int i = 0;
         for(AbstractMap.SimpleEntry<String, Object> e: params){
@@ -130,6 +144,11 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
         }
         return sb.toString();
     }
+	
+	@Override
+	public IEmailKontakt[] select(){
+		return selectBase(null, "", 0);
+	}
 
     @Override
     public IEmailKontakt select(int id) throws NoEmailKontaktFoundException{		
@@ -144,10 +163,10 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
         }
 		return objs[0];
     }
-
+	
     @Override
-    public IEmailKontakt first() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public IEmailKontakt first() throws NoEmailKontaktFoundException {
+		throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
