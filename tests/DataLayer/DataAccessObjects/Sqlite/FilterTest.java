@@ -13,7 +13,7 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author malte
+ * @author Malte Engelhardt
  */
 public class FilterTest {
     
