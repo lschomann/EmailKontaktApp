@@ -17,6 +17,9 @@ import java.sql.DriverManager;
 
 import java.util.LinkedList;
 import java.util.AbstractMap;
+import java.util.HashMap;
+
+import DataLayer.DataAccessObjects.Sqlite.Filter;
 
 
 /**
@@ -24,12 +27,10 @@ import java.util.AbstractMap;
  * @author lschomann, Malte Engelhardt
  */
 public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
-
-	private static String FILTERS_RE = "<=|>=|<|>|=|!=|LIKE|startswith|endswith|contains";
+	private HashMap<String, Object> FILTERS;
 	
 	
-	public void Init() throws SQLException{
-
+	public void init() throws SQLException{		
 		PreparedStatement stmt;
 		Connection conn = null;
 		try{
@@ -89,7 +90,7 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 	 * @return Array of objects that implement IEmailKontakt.
 	 * 
 	 */
-    private IEmailKontakt[] selectBase(AbstractMap.SimpleEntry<String, Object>[] params
+    private IEmailKontakt[] selectBase(Filter[] filters
 										, String orderBy
 										, int limit){
 		
@@ -97,16 +98,17 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 		ResultSet rs;
     	
 		LinkedList<IEmailKontakt> objs = new LinkedList<IEmailKontakt>();
+		
 		try {
-			String where = getWhereString(params);
+			String where = getWhereString(filters);
 			stmt = getConnection().prepareStatement(
 				"SELECT id, vorname, nachname, email FROM kontakte" 
 				+ (where.equals("") ? "" : " WHERE " + where)
 				+ (orderBy.equals("") ? "" : " ORDER BY " + orderBy)
 				+ (limit == 0 ? "" : " LIMIT " + Integer.toString(limit))
 			);
-			for(int i = 0; i < params.length; i++){
-				stmt.setObject(i + 1, params[i]);
+			for(int i = 0; i < filters.length; i++){
+				stmt.setObject(i + 1, filters[i].getFilteredValue());
 			}
             
 			rs = stmt.executeQuery();
@@ -123,19 +125,19 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
         return (IEmailKontakt[]) objs.toArray();
     }
     
-    private String getWhereString(AbstractMap.SimpleEntry<String, Object>[] params){
-        if (params == null){
+    private String getWhereString(Filter[] filters){
+        if (filters  == null){
 			return "";
 		}
 		
 		StringBuilder sb = new StringBuilder();
-        
-		String stripped;
+		
         int i = 0;
-        for(AbstractMap.SimpleEntry<String, Object> e: params){
-            stripped = stripFilter(e.getKey());
-			sb.append(stripped + "=:" + stripped);
-            if (i < params.length - 1){
+        for(Filter filter: filters){
+			sb.append("%s %s :%s".format(filter.getColumnName()
+											, filter.getPredicate()
+											, filter.getColumnName()));
+            if (i < filters.length - 1){
                 sb.append(" AND ");
             }
 			i++;
@@ -143,15 +145,11 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
         return sb.toString();
     }
 	
-	private String stripFilter(String key){
-		return key.replaceAll(FILTERS_RE, "").trim();
-	}
-	
-	private AbstractMap.SimpleEntry<String, Object>[] packParam(AbstractMap.SimpleEntry<String, Object> param){
-		LinkedList<AbstractMap.SimpleEntry<String, Object>> params = 
-			new LinkedList<AbstractMap.SimpleEntry<String, Object>>();
-		params.add(param);
-		return (AbstractMap.SimpleEntry[]) params.toArray();
+	private Filter[] packFilter(Filter filter){
+		LinkedList<Filter> filters = 
+			new LinkedList<Filter>();
+		filters.add(filter);
+		return (Filter[]) filters.toArray();
 	}
 	
 	@Override
@@ -164,7 +162,7 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
     	
 		
 		IEmailKontakt[] objs = selectBase(
-			packParam(new AbstractMap.SimpleEntry<String, Object>("id", new Integer(id)))
+			packFilter(new Filter("id", new Integer(id)))
 			, ""
 			, 0
 		);
@@ -203,13 +201,33 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
     }
 
     @Override
-    public IEmailKontakt next(IEmailKontakt emailKontakt) {
-        return selectBase()
+    public IEmailKontakt next(IEmailKontakt emailKontakt) throws NoNextEmailKontaktFoundException{
+        IEmailKontakt[] objs = selectBase(
+			packFilter(new Filter("id >", emailKontakt.getID()))
+			, "id ASC"
+			, 1
+		);
+		
+		if (objs.length < 1){
+			throw new NoNextEmailKontaktFoundException();
+		}
+		
+		return objs[0];
     }
 
     @Override
-    public IEmailKontakt previous(IEmailKontakt emailKontakt) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public IEmailKontakt previous(IEmailKontakt emailKontakt) throws NoPreviousEmailKontaktFoundException {
+        IEmailKontakt[] objs = selectBase(
+			packFilter(new Filter("id <", emailKontakt.getID()))
+			, "id DESC"
+			, 1
+		);
+		
+		if (objs.length < 1){
+			throw new NoPreviousEmailKontaktFoundException();
+		}
+		
+		return objs[0];
     }
 
     @Override
