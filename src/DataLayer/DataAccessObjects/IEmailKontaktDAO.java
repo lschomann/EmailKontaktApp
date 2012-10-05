@@ -4,6 +4,8 @@
  */
 package DataLayer.DataAccessObjects;
 
+import Exceptions.*;
+
 
 /**
  *
@@ -12,7 +14,7 @@ package DataLayer.DataAccessObjects;
 public interface IEmailKontaktDAO {
     public BusinessObjects.IEmailKontakt create();
     public BusinessObjects.IEmailKontakt[] select();
-    public BusinessObjects.IEmailKontakt select(int id);
+    public BusinessObjects.IEmailKontakt select(int id) throws NoEmailKontaktFoundException;
     public void first();
     public void last();
     public void delete(BusinessObjects.IEmailKontakt emailKontakt);

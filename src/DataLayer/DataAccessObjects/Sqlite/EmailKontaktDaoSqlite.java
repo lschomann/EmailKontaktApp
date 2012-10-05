@@ -7,8 +7,8 @@ package DataLayer.DataAccessObjects.Sqlite;
 import BusinessObjects.IEmailKontakt;
 import DataLayer.BusinessObjects.EmailKontakt;
 import DataLayer.DataAccessObjects.IEmailKontaktDAO;
+import Exceptions.*;
 
-import java.io.Console;
 import java.sql.*;
 import java.util.LinkedList;
 
@@ -72,7 +72,7 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
     	Statement stmt;
     	ResultSet rs;
     	
-    	LinkedList<EmailKontakt> kontakte = new LinkedList<EmailKontakt>();
+    	LinkedList<IEmailKontakt> kontakte = new LinkedList<IEmailKontakt>();
 		try {
 			stmt = getConnection().createStatement();
 			rs = stmt.executeQuery("SELECT * FROM kontakte;");
@@ -90,14 +90,14 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
     }
 
     @Override
-    public IEmailKontakt select(int id) {
+    public IEmailKontakt select(int id) throws NoEmailKontaktFoundException{
     	Statement stmt;
     	ResultSet rs;
     	
-    	LinkedList<EmailKontakt> kontakte = new LinkedList<EmailKontakt>();
+    	LinkedList<IEmailKontakt> kontakte = new LinkedList<IEmailKontakt>();
 		try {
 			stmt = getConnection().createStatement();
-			rs = stmt.executeQuery("SELECT * FROM kontakte WHERE id = " + id);
+			rs = stmt.executeQuery("SELECT * FROM kontakte WHERE id = " + Integer.toString(id));
 			while (rs.next()){
 	    		kontakte.add(new EmailKontakt(rs.getInt("id"), rs.getString("vorname"), 
 	    							rs.getString("nachname"), rs.getString("email")));
@@ -108,7 +108,10 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return (IEmailKontakt[]) kontakte.toArray();
+        if (kontakte.size() < 1){
+            throw new Exceptions.NoEmailKontaktFoundException();
+        }
+		return kontakte.getFirst();
     }
 
     @Override

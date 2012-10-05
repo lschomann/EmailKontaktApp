@@ -8,6 +8,6 @@ package Exceptions;
  *
  * @author lschomann
  */
-public class NoEmailKontaktFoundException {
+public class NoEmailKontaktFoundException extends Exception{
     
 }
