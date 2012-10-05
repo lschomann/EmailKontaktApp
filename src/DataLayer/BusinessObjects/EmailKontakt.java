@@ -6,15 +6,23 @@ package DataLayer.BusinessObjects;
 
 /**
  *
- * @author lschomann
+ * @author lschomann, Malte Engelhardt
  */
 public class EmailKontakt implements BusinessObjects.IEmailKontakt{
     private int id;
     private String vorname, nachname, email;
     
-    public void setID(int id){
-        
+    public EmailKontakt(int id, String vorname, String nachname, String email){
+    	setID(id);
+    	setVorname(vorname);
+    	setNachname(nachname);
+    	setEmail(email);
     }
+    
+    public void setID(int id){
+        this.id = id;
+    }
+    
     public int getID() {
        
        return id;
@@ -32,12 +40,12 @@ public class EmailKontakt implements BusinessObjects.IEmailKontakt{
         return email;
     }
     public void setVorname(String vorname) {
-        
+        this.vorname = vorname;
     }
     public void setNachname(String nachname) {
-        
+        this.nachname = nachname;
     }
     public void setEmail(String email) {
-        
+        this.email = email;
     }
 }

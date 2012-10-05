@@ -4,19 +4,24 @@
  */
 package DataLayer.DataAccessObjects;
 
+import java.sql.SQLException;
+
+import Exceptions.*;
+import BusinessObjects.IEmailKontakt;
+
 
 /**
  *
  * @author lschomann
  */
 public interface IEmailKontaktDAO {
-    public BusinessObjects.IEmailKontakt create();
-    public BusinessObjects.IEmailKontakt[] select();
-    public BusinessObjects.IEmailKontakt select(int id);
-    public void first();
-    public void last();
-    public void delete(BusinessObjects.IEmailKontakt emailKontakt);
-    public void next(BusinessObjects.IEmailKontakt emailKontakt);
-    public void previous(BusinessObjects.IEmailKontakt emailKontakt);
-    public void save(BusinessObjects.IEmailKontakt emailKontakt);
+    public IEmailKontakt create();
+    public IEmailKontakt[] select();
+    public IEmailKontakt select(int id) throws NoEmailKontaktFoundException;
+    public IEmailKontakt first() throws NoEmailKontaktFoundException ;
+    public IEmailKontakt last() throws NoEmailKontaktFoundException ;
+    public void delete(IEmailKontakt emailKontakt);
+    public IEmailKontakt next(IEmailKontakt emailKontakt) throws NoNextEmailKontaktFoundException ;
+    public IEmailKontakt previous(IEmailKontakt emailKontakt) throws NoPreviousEmailKontaktFoundException ;
+    public void save(IEmailKontakt emailKontakt);
 }
