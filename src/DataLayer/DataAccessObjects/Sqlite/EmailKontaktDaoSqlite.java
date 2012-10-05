@@ -210,7 +210,11 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 
     @Override
     public IEmailKontakt next(IEmailKontakt emailKontakt) throws NoNextEmailKontaktFoundException{
-        IEmailKontakt[] objs = selectBase(
+        if (emailKontakt.getID() == 0){
+			throw new NoNextEmailKontaktFoundException();
+		}
+		
+		IEmailKontakt[] objs = selectBase(
 			packFilter(new Filter("id >", emailKontakt.getID()))
 			, "id ASC"
 			, 1
@@ -225,7 +229,11 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 
     @Override
     public IEmailKontakt previous(IEmailKontakt emailKontakt) throws NoPreviousEmailKontaktFoundException {
-        IEmailKontakt[] objs = selectBase(
+		if (emailKontakt.getID() == 0){
+			throw new NoPreviousEmailKontaktFoundException();
+		}
+				
+		IEmailKontakt[] objs = selectBase(
 			packFilter(new Filter("id <", emailKontakt.getID()))
 			, "id DESC"
 			, 1
