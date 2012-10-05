@@ -41,11 +41,17 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 			
 		    stmt = conn.prepareStatement("INSERT INTO kontakte VALUES (null, ?, ?, ?);");
 		    
-            stmt.setString(2,"Richard");
-            stmt.setString(3,"Lionheart");
-            stmt.setString(4,"rich@king.co.uk");
-            stmt.addBatch();
-            
+			// !DEBUG populate db with some sample data
+			stmt.setString(2,"Richard");
+			stmt.setString(3,"Lionheart");
+			stmt.setString(4,"rich@crown.co.uk");
+			stmt.addBatch();
+			
+			stmt.setString(2,"Robin");
+			stmt.setString(3,"Hood");
+			stmt.setString(4,"man-in-tights@sherwood-forrest.co.uk");
+			stmt.addBatch();
+
             stmt.execute();
 		    
 		    conn.commit();
