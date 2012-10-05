@@ -78,7 +78,7 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 	
     @Override
     public IEmailKontakt create() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return new EmailKontakt(0, null, null, null);
     }
 		
 	/**
