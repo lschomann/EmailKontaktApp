@@ -247,8 +247,38 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
     }
 
     @Override
-    public void save(IEmailKontakt emailKontakt) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void save(IEmailKontakt emailKontakt){
+		
+		PreparedStatement stmt;
+		
+		try{
+			// INSERT
+			if (emailKontakt.getID() == 0){
+				stmt = getConnection().prepareStatement(
+					"INSERT INTO kontakte VALUES(null, ?, ?, ?)"
+				);
+
+				stmt.setString(1, emailKontakt.getVorname());
+				stmt.setString(2, emailKontakt.getNachname());
+				stmt.setString(3, emailKontakt.getEmail());
+			}
+
+			// UPDATE
+			else{
+				stmt = getConnection().prepareStatement(
+					"UPDATE kontakte SET vorname = ?, nachname = ?, email = ? WHERE id = ?"
+				);
+				stmt.setString(1, emailKontakt.getVorname());
+				stmt.setString(1, emailKontakt.getNachname());
+				stmt.setString(1, emailKontakt.getEmail());
+				stmt.setInt(4, emailKontakt.getID());
+			}
+			stmt.executeUpdate();
+		}
+		catch(SQLException ex){
+			ex.printStackTrace();
+		}
+		 
     }
     
 }

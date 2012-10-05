@@ -4,6 +4,8 @@
  */
 package DataLayer.DataAccessObjects;
 
+import java.sql.SQLException;
+
 import Exceptions.*;
 import BusinessObjects.IEmailKontakt;
 
