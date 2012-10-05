@@ -25,6 +25,9 @@ import java.util.AbstractMap;
  */
 public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 
+	private static String FILTERS_RE = "<=|>=|<|>|=|!=|LIKE|startswith|endswith|contains";
+	
+	
 	public void Init() throws SQLException{
 
 		PreparedStatement stmt;
@@ -76,14 +79,7 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
     public IEmailKontakt create() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-	
-	private IEmailKontakt[] selectBase(AbstractMap.SimpleEntry<String, Object> param){
-		LinkedList<AbstractMap.SimpleEntry<String, Object>> params = 
-			new LinkedList<AbstractMap.SimpleEntry<String, Object>>();
-		params.add(param);
-		return selectBase((AbstractMap.SimpleEntry[]) params.toArray(), "", 0);
-	}
-	
+		
 	/**
 	 * 
 	 * @author Malte Engelhardt
@@ -134,9 +130,11 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 		
 		StringBuilder sb = new StringBuilder();
         
+		String stripped;
         int i = 0;
         for(AbstractMap.SimpleEntry<String, Object> e: params){
-            sb.append(e.getKey() + "=:" + e.getKey());
+            stripped = stripFilter(e.getKey());
+			sb.append(stripped + "=:" + stripped);
             if (i < params.length - 1){
                 sb.append(" AND ");
             }
@@ -144,6 +142,17 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
         }
         return sb.toString();
     }
+	
+	private String stripFilter(String key){
+		return key.replaceAll(FILTERS_RE, "").trim();
+	}
+	
+	private AbstractMap.SimpleEntry<String, Object>[] packParam(AbstractMap.SimpleEntry<String, Object> param){
+		LinkedList<AbstractMap.SimpleEntry<String, Object>> params = 
+			new LinkedList<AbstractMap.SimpleEntry<String, Object>>();
+		params.add(param);
+		return (AbstractMap.SimpleEntry[]) params.toArray();
+	}
 	
 	@Override
 	public IEmailKontakt[] select(){
@@ -155,7 +164,9 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
     	
 		
 		IEmailKontakt[] objs = selectBase(
-			new AbstractMap.SimpleEntry<String, Object>("id", new Integer(id))
+			packParam(new AbstractMap.SimpleEntry<String, Object>("id", new Integer(id)))
+			, ""
+			, 0
 		);
 	    
         if (objs.length < 1){
@@ -193,7 +204,7 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 
     @Override
     public IEmailKontakt next(IEmailKontakt emailKontakt) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return selectBase()
     }
 
     @Override
