@@ -4,6 +4,8 @@
  */
 package DataLayer.DataAccessObjects.Sqlite;
 
+import java.sql.SQLException;
+
 import DataLayer.DataAccessObjects.IEmailKontaktDAO;
 import DataLayer.IDataLayer;
 
@@ -15,7 +17,16 @@ public class DataLayerSqlite implements IDataLayer{
 
     @Override
     public IEmailKontaktDAO getEmailKontaktDao() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        EmailKontaktDaoSqlite dao = new EmailKontaktDaoSqlite();
+        
+        try{
+            dao.init();
+        }
+        catch(SQLException ex){
+            ex.printStackTrace();
+        }
+        
+        return dao;
     }
     
 }

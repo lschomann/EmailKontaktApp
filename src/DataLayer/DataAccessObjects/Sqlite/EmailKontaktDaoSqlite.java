@@ -27,17 +27,24 @@ import DataLayer.DataAccessObjects.Sqlite.Filter;
  * @author lschomann, Malte Engelhardt
  */
 public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
-	private HashMap<String, Object> FILTERS;
-	
-	
+
 	public void init() throws SQLException{		
 		PreparedStatement stmt;
 		Connection conn = null;
+        
 		try{
 		    conn = getConnection();
-		    
-			stmt = conn.prepareStatement("CREATE TABLE kontakte(id integer primary key, vorname, nachname, email);");
-			stmt.execute();
+            
+            stmt = conn.prepareStatement("SELECT name FROM sqlite_master WHERE type='table' AND name='kontakte';");
+            stmt.execute();
+            
+            // table exists, bail out
+            if (stmt.getResultSet().next()){
+                return;
+            }
+            
+            stmt = conn.prepareStatement("CREATE TABLE kontakte(id integer primary key, vorname, nachname, email);");
+            stmt.execute();
 			
 		    stmt = conn.prepareStatement("INSERT INTO kontakte VALUES (null, ?, ?, ?);");
 		    
