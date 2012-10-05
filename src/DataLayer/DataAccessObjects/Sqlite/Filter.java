@@ -25,8 +25,8 @@ public class Filter {
 		return key; 
 	}
 	
-	public Object getFilteredValue(){
-		String p = getPredicate().toLowerCase();
+	public Object getProcessedValue(){
+		String p = getOperator().toLowerCase();
 		
 		if (p.equals("startswith")){
 			return getRawValue().toString() + "%";
@@ -49,7 +49,7 @@ public class Filter {
 		return key.replaceAll(FILTERS_RE, "").trim();
 	}
 	
-	public String getPredicate() { 
+	public String getOperator() { 
 		String p = getKey().replaceAll(getColumnName(), "").trim();
 		
 		// default filter when only column name is supplied

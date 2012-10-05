@@ -121,7 +121,7 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 				+ (limit == 0 ? "" : " LIMIT " + Integer.toString(limit))
 			);
 			for(int i = 0; i < filters.length; i++){
-				stmt.setObject(i + 1, filters[i].getFilteredValue());
+				stmt.setObject(i + 1, filters[i].getProcessedValue());
 			}
             
 			rs = stmt.executeQuery();
@@ -148,7 +148,7 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
         int i = 0;
         for(Filter filter: filters){
 			sb.append("%s %s :%s".format(filter.getColumnName()
-											, filter.getPredicate()
+											, filter.getOperator()
 											, filter.getColumnName()));
             if (i < filters.length - 1){
                 sb.append(" AND ");
