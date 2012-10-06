@@ -148,7 +148,7 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 		LinkedList<IEmailKontakt> objs = new LinkedList<IEmailKontakt>();
 		
 		try {
-			String where = getWhereString(filters);
+			String where = (filters == null ? "" : getWhereString(filters));
 			conn = getConnection();
 			stmt = conn.prepareStatement(
 				"SELECT id, vorname, nachname, email FROM kontakte" 
@@ -156,8 +156,13 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 				+ (orderBy.equals("") ? "" : " ORDER BY " + orderBy)
 				+ (limit == 0 ? "" : " LIMIT " + Integer.toString(limit))
 			);
-			for(int i = 0; i < filters.length; i++){
-				stmt.setObject(i + 1, filters[i].getProcessedValue());
+			
+			if (filters != null){
+				int i = 1;
+				for(Filter filter: filters){
+					stmt.setObject(i, filter.getProcessedValue());
+					i++;
+				}
 			}
             
 			rs = stmt.executeQuery();
@@ -165,7 +170,7 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 	    		objs.add(new EmailKontakt(rs.getInt("id"), rs.getString("vorname"), 
 	    							rs.getString("nachname"), rs.getString("email")));
 	    	}
-		    rs.close();
+
 	    	
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -183,17 +188,13 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
     }
     
     private String getWhereString(Filter[] filters){
-        if (filters  == null){
-			return "";
-		}
-		
 		StringBuilder sb = new StringBuilder();
 		
         int i = 0;
         for(Filter filter: filters){
-			sb.append("%s %s :%s".format(filter.getColumnName()
-											, filter.getOperator()
-											, filter.getColumnName()));
+			sb.append(String.format("%s %s :%s", filter.getColumnName()
+												, filter.getOperator()
+												, filter.getColumnName()));
             if (i < filters.length - 1){
                 sb.append(" AND ");
             }

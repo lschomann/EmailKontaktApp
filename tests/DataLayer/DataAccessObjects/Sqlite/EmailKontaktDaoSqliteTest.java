@@ -6,6 +6,7 @@ package DataLayer.DataAccessObjects.Sqlite;
 
 import BusinessObjects.IEmailKontakt;
 
+
 import Exceptions.*;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -183,7 +184,7 @@ public class EmailKontaktDaoSqliteTest {
      * Test of select method, of class EmailKontaktDaoSqlite.
      */
     @Test
-    public void testSelect_int() throws Exception {
+    public void testSelect_int() {
 		
 		System.out.println("testSelect_int");
 		
@@ -203,7 +204,12 @@ public class EmailKontaktDaoSqliteTest {
 			fail(ex.getMessage());
 		}
 		
-		dao.init();
+		try{
+			dao.init();
+		}
+		catch(SQLException ex){
+			fail(ex.getMessage());
+		}
 		
 		// insert test data
 		IEmailKontakt donald;
@@ -234,10 +240,21 @@ public class EmailKontaktDaoSqliteTest {
 		daniel.setEmail("duesentrieb@quackburg.com");
 		dao.save(daniel);
 		
-		IEmailKontakt obj = dao.select(2);
+		try{
+			IEmailKontakt obj = dao.select(2);
+			assertEquals(obj.getID(), daisy.getID());
+			assertEquals(obj.getVorname(), "Daisy");
+		}
+		catch(NoEmailKontaktFoundException ex){
+			fail(ex.getMessage());
+		}
 		
-		assertEquals(obj.getID(), daisy.getID());
-		assertEquals(obj.getVorname(), "Daisy");
+		try{
+			IEmailKontakt obj = dao.select(10);
+		}
+		catch(NoEmailKontaktFoundException ex){
+			// expected
+		}
     }
 
     /**
@@ -407,7 +424,7 @@ public class EmailKontaktDaoSqliteTest {
      * Test of next method, of class EmailKontaktDaoSqlite.
      */
     @Test
-    public void testNext() throws Exception {
+    public void testNext() {
 		
 		System.out.println("testNext");
 		
@@ -427,7 +444,12 @@ public class EmailKontaktDaoSqliteTest {
 			fail(ex.getMessage());
 		}
 		
-		dao.init();
+		try{
+			dao.init();
+		}
+		catch(SQLException ex){
+			fail(ex.getMessage());
+		}
 		
 		// insert test data
 		IEmailKontakt donald;
@@ -458,10 +480,14 @@ public class EmailKontaktDaoSqliteTest {
 		daniel.setEmail("duesentrieb@quackburg.com");
 		dao.save(daniel);
 		
-		IEmailKontakt obj = dao.next(mickey);
-		
-		assertEquals(obj.getID(), daniel.getID());
-		assertEquals(obj.getVorname(), "Daniel");
+		try{
+			IEmailKontakt obj = dao.next(mickey);
+			assertEquals(obj.getID(), daniel.getID());
+			assertEquals(obj.getVorname(), "Daniel");
+		}
+		catch(NoNextEmailKontaktFoundException ex){
+			fail(ex.getMessage());
+		}
 		
 		try{
 			dao.next(daniel);
@@ -475,7 +501,7 @@ public class EmailKontaktDaoSqliteTest {
      * Test of previous method, of class EmailKontaktDaoSqlite.
      */
     @Test
-    public void testPrevious() throws Exception {
+    public void testPrevious() throws NoPreviousEmailKontaktFoundException {
 		
 		System.out.println("testPrevious");
 		
@@ -495,7 +521,12 @@ public class EmailKontaktDaoSqliteTest {
 			fail(ex.getMessage());
 		}
 		
-		dao.init();
+		try{
+			dao.init();
+		}
+		catch(SQLException ex){
+			fail(ex.getMessage());
+		}
 		
 		// insert test data
 		IEmailKontakt donald;
@@ -526,10 +557,14 @@ public class EmailKontaktDaoSqliteTest {
 		daniel.setEmail("duesentrieb@quackburg.com");
 		dao.save(daniel);
 		
-		IEmailKontakt obj = dao.previous(mickey);
-		
-		assertEquals(obj.getID(), daisy.getID());
-		assertEquals(obj.getVorname(), "Daisy");
+		try{
+			IEmailKontakt obj = dao.previous(mickey);
+			assertEquals(obj.getID(), daisy.getID());
+			assertEquals(obj.getVorname(), "Daisy");
+		}
+		catch(NoPreviousEmailKontaktFoundException ex){
+			fail(ex.getMessage());
+		}
 		
 		try{
 			dao.previous(donald);
@@ -547,9 +582,9 @@ public class EmailKontaktDaoSqliteTest {
 		
 		System.out.println("testSave");
 		
-		Connection conn = null;
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
+		Connection conn = null, conn2 = null;
+		PreparedStatement stmt = null, stmt2 = null;
+		ResultSet rs = null, rs2 = null;
 			
 		try{
 			EmailKontaktDaoSqlite dao = new EmailKontaktDaoSqlite();
@@ -584,10 +619,8 @@ public class EmailKontaktDaoSqliteTest {
 			// how many rows are in the db already?
 			rs = stmt.getResultSet();
 			int count = (rs.next() ? rs.getInt(1) : 0);
-			
-			System.out.println("in testSave: vorname=" + rs.getString("vorname"));
-			
 			rs.close();
+			conn.close();
 			
 			assertEquals(0, count);
 
@@ -601,11 +634,14 @@ public class EmailKontaktDaoSqliteTest {
 			dao.save(k);
 
 			// get last row
+			conn = dao.getConnection();
 			stmt = conn.prepareStatement(
-				"SELECT COUNT(id), id, vorname, nachname, email FROM kontakte ORDER BY id DESC LIMIT 1"
+				"SELECT COUNT(id), id, vorname, nachname, email FROM kontakte ORDER BY id DESC LIMIT 1;"
 			);
+			stmt.execute();
+			
 			rs = stmt.getResultSet();
-
+			
 			assertTrue(rs.next());
 			assertEquals(count + 1, rs.getInt(1));
 			assertNotSame(rs.getInt("id"), count);
@@ -613,6 +649,10 @@ public class EmailKontaktDaoSqliteTest {
 			assertEquals(rs.getString("nachname"), "Toothrot");
 			assertEquals(rs.getString("email"), "herman.toothrot@lucasarts.com");
 			assertTrue(k.getID() != 0);
+		}
+		catch(AssertionError ex){
+			ex.printStackTrace();
+			fail(ex.getMessage());
 		}
 		catch(Exception ex){
 			ex.printStackTrace();
