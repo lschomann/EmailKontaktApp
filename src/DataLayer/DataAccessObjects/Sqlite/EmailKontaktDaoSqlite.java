@@ -29,7 +29,7 @@ import DataLayer.DataAccessObjects.Sqlite.Filter;
  */
 public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 
-	private static Boolean isInitialized = false;
+	private Boolean isInitialized = false;
 	
 	
 	public void init() throws SQLException{		
@@ -48,25 +48,8 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 				stmt = conn.prepareStatement("CREATE TABLE kontakte(id integer primary key, vorname, nachname, email);");
 				stmt.execute();
 
-				stmt = conn.prepareStatement("INSERT INTO kontakte VALUES (null, ?, ?, ?);");
-
-				// DEBUG populate db with some sample data
-				stmt.setString(2,"Richard");
-				stmt.setString(3,"Lionheart");
-				stmt.setString(4,"rich@crown.co.uk");
-				stmt.addBatch();
-
-				stmt.setString(2,"Robin");
-				stmt.setString(3,"Hood");
-				stmt.setString(4,"man-in-tights@sherwood-forrest.co.uk");
-				stmt.addBatch();
-
-				stmt.execute();
-
-				conn.commit();
             }
 			isInitialized = true;
-            
 		}
 		catch(Exception ex){
 			ex.printStackTrace();
@@ -76,16 +59,21 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 		}
 	}
 	
-	public Boolean dropTable(String name){
+	public Boolean dropTable(String name) throws SQLException{
+		Connection conn = null;
+		PreparedStatement stmt = null;
 		try{
-			Connection conn = getConnection();
-			conn.prepareStatement("DROP TABLE " + name).executeUpdate();
+			conn = getConnection();
+			stmt = conn.prepareStatement("DROP TABLE " + name);
+			stmt.executeUpdate();
 			return true;
 		}
 		catch(SQLException ex){
-			ex.printStackTrace();
+			throw ex;
 		}
-		return false;
+		finally{
+			conn.close();
+		}
 	}
     
     /**
@@ -101,7 +89,13 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
             "SELECT name FROM sqlite_master WHERE type='table' AND name='kontakte';"
         );
         stmt.execute();
-        return stmt.getResultSet().next();
+
+		boolean exists = stmt.getResultSet().next();
+		conn.close();
+		
+		System.out.println("testSelect_0args: conn status=" + Boolean.toString(conn.isClosed()));
+		
+        return exists;
     }
 	
 	public Connection getConnection(){
@@ -147,14 +141,16 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 										, String orderBy
 										, int limit){
 		
+		Connection conn = null;
 		PreparedStatement stmt;
-		ResultSet rs;
+		ResultSet rs = null;
     	
 		LinkedList<IEmailKontakt> objs = new LinkedList<IEmailKontakt>();
 		
 		try {
 			String where = getWhereString(filters);
-			stmt = getConnection().prepareStatement(
+			conn = getConnection();
+			stmt = conn.prepareStatement(
 				"SELECT id, vorname, nachname, email FROM kontakte" 
 				+ (where.equals("") ? "" : " WHERE " + where)
 				+ (orderBy.equals("") ? "" : " ORDER BY " + orderBy)
@@ -171,11 +167,19 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 	    	}
 		    rs.close();
 	    	
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		}
-        return (IEmailKontakt[]) objs.toArray();
+		finally{
+			try{
+				rs.close();
+				conn.close();
+			}
+			catch(Exception ex){
+				ex.printStackTrace();
+			}
+		}
+        return objs.toArray(new IEmailKontakt[objs.size()]);
     }
     
     private String getWhereString(Filter[] filters){
@@ -202,7 +206,7 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 		LinkedList<Filter> filters = 
 			new LinkedList<Filter>();
 		filters.add(filter);
-		return (Filter[]) filters.toArray();
+		return filters.toArray(new Filter[filters.size()]);
 	}
 	
 	@Override
@@ -250,14 +254,25 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 
     @Override
     public void delete(IEmailKontakt emailKontakt){
-        try{
-			PreparedStatement stmt = getConnection().prepareStatement(
+        Connection conn = null;
+		PreparedStatement stmt = null;
+		try{
+			conn = getConnection();
+			stmt = conn.prepareStatement(
 				"DELETE FROM kontakte WHERE id = " + Integer.toString(emailKontakt.getID())
 			);
 			stmt.executeUpdate();
 		}
 		catch(SQLException ex){
 			ex.printStackTrace();
+		}
+		finally{
+			try{
+				conn.close();
+			}
+			catch(SQLException ex){
+				ex.printStackTrace();
+			}
 		}
     }
 
@@ -302,13 +317,16 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
     @Override
     public void save(IEmailKontakt emailKontakt){
 		
-		PreparedStatement stmt;
+		Connection conn = null;
+		PreparedStatement stmt = null;
 		ResultSet generatedKeys;
 		
 		try{
+			conn = getConnection();
+			
 			// INSERT
 			if (emailKontakt.getID() == 0){
-				stmt = getConnection().prepareStatement(
+				stmt = conn.prepareStatement(
 					"INSERT INTO kontakte VALUES(null, ?, ?, ?)"
 				);
 				
@@ -324,7 +342,7 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 
 			// UPDATE
 			else{
-				stmt = getConnection().prepareStatement(
+				stmt = conn.prepareStatement(
 					"UPDATE kontakte SET vorname = ?, nachname = ?, email = ? WHERE id = ?"
 				);
 				stmt.setString(1, emailKontakt.getVorname());
@@ -336,6 +354,14 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 		}
 		catch(SQLException ex){
 			ex.printStackTrace();
+		}
+		finally{
+			try{
+				conn.close();
+			}
+			catch(SQLException ex){
+				ex.printStackTrace();
+			}
 		}
 		 
     }

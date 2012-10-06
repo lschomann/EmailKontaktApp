@@ -51,6 +51,9 @@ public class EmailKontaktDaoSqliteTest {
     public void testInit() throws Exception {
         EmailKontaktDaoSqlite dao = new EmailKontaktDaoSqlite();
         
+		if (dao.tableExists("kontakte")){
+			dao.dropTable("kontakte");
+		}
         assertFalse(dao.tableExists("kontakte"));
         
         dao.init();
@@ -71,7 +74,11 @@ public class EmailKontaktDaoSqliteTest {
                 "SELECT name FROM 'sqlite_master' WHERE type='table' AND name='kontakte'"
             );
 			stmt.execute();
-            assertEquals(stmt.getResultSet().next(), dao.tableExists("kontakte"));
+			Boolean exists_sql = stmt.getResultSet().next();
+			stmt.close();
+			conn.close();
+			Boolean exists_dao = dao.tableExists("kontakte");
+            assertEquals(exists_sql, exists_dao);
         }
         catch(SQLException ex){
             ex.printStackTrace();
@@ -88,6 +95,7 @@ public class EmailKontaktDaoSqliteTest {
 		instance.init();
         Connection result = instance.getConnection();
         assertTrue(result instanceof Connection);
+		result.close();
     }
 
     /**
@@ -111,6 +119,9 @@ public class EmailKontaktDaoSqliteTest {
      */
     @Test
     public void testSelect_0args() throws SQLException{
+		
+		System.out.println("testSelect_0args");
+		
         EmailKontaktDaoSqlite dao = new EmailKontaktDaoSqlite();
 		
 		// remove table 'kontakte'
@@ -124,10 +135,11 @@ public class EmailKontaktDaoSqliteTest {
 		}
 		catch(SQLException ex){
 			ex.printStackTrace();
-			fail("Unknown problem.");
+			fail(ex.getMessage());
 		}
 		
 		dao.init();
+		assertTrue(dao.tableExists("kontakte"));
 		
 		// insert test data
 		IEmailKontakt donald;
@@ -172,6 +184,9 @@ public class EmailKontaktDaoSqliteTest {
      */
     @Test
     public void testSelect_int() throws Exception {
+		
+		System.out.println("testSelect_int");
+		
         EmailKontaktDaoSqlite dao = new EmailKontaktDaoSqlite();
 		
 		// remove table 'kontakte'
@@ -185,7 +200,7 @@ public class EmailKontaktDaoSqliteTest {
 		}
 		catch(SQLException ex){
 			ex.printStackTrace();
-			fail("Unknown problem.");
+			fail(ex.getMessage());
 		}
 		
 		dao.init();
@@ -230,6 +245,9 @@ public class EmailKontaktDaoSqliteTest {
      */
     @Test
     public void testFirst() throws Exception {
+		
+		System.out.println("testFirst");
+		
         EmailKontaktDaoSqlite dao = new EmailKontaktDaoSqlite();
 		
 		// remove table 'kontakte'
@@ -243,7 +261,7 @@ public class EmailKontaktDaoSqliteTest {
 		}
 		catch(SQLException ex){
 			ex.printStackTrace();
-			fail("Unknown problem.");
+			fail(ex.getMessage());
 		}
 		
 		dao.init();
@@ -295,6 +313,10 @@ public class EmailKontaktDaoSqliteTest {
      */
     @Test
     public void testLast() throws Exception {
+		
+		System.out.println("testLast");
+		
+		
 		EmailKontaktDaoSqlite dao = new EmailKontaktDaoSqlite();
 		
 		// remove table 'kontakte'
@@ -308,7 +330,7 @@ public class EmailKontaktDaoSqliteTest {
 		}
 		catch(SQLException ex){
 			ex.printStackTrace();
-			fail("Unknown problem.");
+			fail(ex.getMessage());
 		}
 		
 		dao.init();
@@ -386,6 +408,9 @@ public class EmailKontaktDaoSqliteTest {
      */
     @Test
     public void testNext() throws Exception {
+		
+		System.out.println("testNext");
+		
         EmailKontaktDaoSqlite dao = new EmailKontaktDaoSqlite();
 		
 		// remove table 'kontakte'
@@ -399,7 +424,7 @@ public class EmailKontaktDaoSqliteTest {
 		}
 		catch(SQLException ex){
 			ex.printStackTrace();
-			fail("Unknown problem.");
+			fail(ex.getMessage());
 		}
 		
 		dao.init();
@@ -451,6 +476,9 @@ public class EmailKontaktDaoSqliteTest {
      */
     @Test
     public void testPrevious() throws Exception {
+		
+		System.out.println("testPrevious");
+		
         EmailKontaktDaoSqlite dao = new EmailKontaktDaoSqlite();
 		
 		// remove table 'kontakte'
@@ -464,7 +492,7 @@ public class EmailKontaktDaoSqliteTest {
 		}
 		catch(SQLException ex){
 			ex.printStackTrace();
-			fail("Unknown problem.");
+			fail(ex.getMessage());
 		}
 		
 		dao.init();
@@ -516,21 +544,52 @@ public class EmailKontaktDaoSqliteTest {
      */
     @Test
     public void testSave() {
+		
+		System.out.println("testSave");
+		
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+			
 		try{
 			EmailKontaktDaoSqlite dao = new EmailKontaktDaoSqlite();
-			Connection conn = dao.getConnection();
-			dao.init();
+			
+			// remove table 'kontakte'
+			try{
+				if (dao.tableExists("kontakte")){
+					if (!dao.dropTable("kontakte")){
+						fail("Table 'kontakte' exists but could not be DROPped.");
+					}
+				}
+				assertEquals(dao.tableExists("kontakte"), false);
+			}
+			catch(Exception ex){
+				ex.printStackTrace();
+				fail(ex.getMessage());
+			}
+			
+			assertFalse(dao.tableExists("kontakte"));
 
-			PreparedStatement stmt;
+			dao.init();
+			
+			assertTrue(dao.tableExists("kontake"));
+			
+			conn = dao.getConnection();
+
 			stmt = conn.prepareStatement(
-				"SELECT COUNT(*) FROM kontakte;"
+				"SELECT COUNT(*), vorname FROM kontakte;"
 			);
 			stmt.execute();
 
 			// how many rows are in the db already?
-			ResultSet rs;
 			rs = stmt.getResultSet();
 			int count = (rs.next() ? rs.getInt(1) : 0);
+			
+			System.out.println("in testSave: vorname=" + rs.getString("vorname"));
+			
+			rs.close();
+			
+			assertEquals(0, count);
 
 			IEmailKontakt k = dao.create();
 
@@ -555,9 +614,18 @@ public class EmailKontaktDaoSqliteTest {
 			assertEquals(rs.getString("email"), "herman.toothrot@lucasarts.com");
 			assertTrue(k.getID() != 0);
 		}
-		catch(SQLException ex){
+		catch(Exception ex){
 			ex.printStackTrace();
 			fail(ex.getMessage());
+		}
+		finally{
+			try{
+				rs.close();
+				conn.close();
+			}
+			catch(Exception ex){
+				ex.printStackTrace();
+			}
 		}
     }
 }
