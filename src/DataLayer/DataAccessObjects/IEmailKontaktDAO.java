@@ -13,6 +13,7 @@ import BusinessObjects.IEmailKontakt;
 /**
  *
  * @author lschomann
+ * @author Malte Engelhardt
  */
 public interface IEmailKontaktDAO {
     public IEmailKontakt create();

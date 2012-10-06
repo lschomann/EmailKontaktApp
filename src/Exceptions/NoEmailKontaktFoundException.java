@@ -7,6 +7,7 @@ package Exceptions;
 /**
  *
  * @author lschomann
+ * @author Malte Engelhardt
  */
 public class NoEmailKontaktFoundException extends Exception{
     

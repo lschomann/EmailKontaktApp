@@ -24,47 +24,68 @@ import DataLayer.DataAccessObjects.Sqlite.Filter;
 
 /**
  *
- * @author lschomann, Malte Engelhardt
+ * @author lschomann
+ * @author Malte Engelhardt
  */
 public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 
+	private static Boolean isInitialized = false;
+	
+	
 	public void init() throws SQLException{		
+		if (isInitialized){
+			return;
+		}
+		
 		PreparedStatement stmt;
 		Connection conn = null;
         
 		try{
 		    conn = getConnection();
             
-            if (tableExists("kontakte")){
-                return;
-            }
-            
-            stmt = conn.prepareStatement("CREATE TABLE kontakte(id integer primary key, vorname, nachname, email);");
-            stmt.execute();
-			
-		    stmt = conn.prepareStatement("INSERT INTO kontakte VALUES (null, ?, ?, ?);");
-		    
-			// !DEBUG populate db with some sample data
-			stmt.setString(2,"Richard");
-			stmt.setString(3,"Lionheart");
-			stmt.setString(4,"rich@crown.co.uk");
-			stmt.addBatch();
-			
-			stmt.setString(2,"Robin");
-			stmt.setString(3,"Hood");
-			stmt.setString(4,"man-in-tights@sherwood-forrest.co.uk");
-			stmt.addBatch();
+            if (!tableExists("kontakte")){
 
-            stmt.execute();
-		    
-		    conn.commit();
+				stmt = conn.prepareStatement("CREATE TABLE kontakte(id integer primary key, vorname, nachname, email);");
+				stmt.execute();
+
+				stmt = conn.prepareStatement("INSERT INTO kontakte VALUES (null, ?, ?, ?);");
+
+				// DEBUG populate db with some sample data
+				stmt.setString(2,"Richard");
+				stmt.setString(3,"Lionheart");
+				stmt.setString(4,"rich@crown.co.uk");
+				stmt.addBatch();
+
+				stmt.setString(2,"Robin");
+				stmt.setString(3,"Hood");
+				stmt.setString(4,"man-in-tights@sherwood-forrest.co.uk");
+				stmt.addBatch();
+
+				stmt.execute();
+
+				conn.commit();
+            }
+			isInitialized = true;
+            
 		}
 		catch(Exception ex){
-			System.out.println(ex.toString());
+			ex.printStackTrace();
 		}
 		finally{
 			conn.close();
 		}
+	}
+	
+	public Boolean dropTable(String name){
+		try{
+			Connection conn = getConnection();
+			conn.prepareStatement("DROP TABLE " + name).executeUpdate();
+			return true;
+		}
+		catch(SQLException ex){
+			ex.printStackTrace();
+		}
+		return false;
 	}
     
     /**
@@ -95,7 +116,7 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 		    conn = DriverManager.getConnection(connstr, user, pw);
 		}
 		catch(Exception ex){
-			System.out.println(ex.toString());
+			ex.printStackTrace();
 		}
 		return conn;
 	}
@@ -282,6 +303,7 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
     public void save(IEmailKontakt emailKontakt){
 		
 		PreparedStatement stmt;
+		ResultSet generatedKeys;
 		
 		try{
 			// INSERT
@@ -289,10 +311,15 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 				stmt = getConnection().prepareStatement(
 					"INSERT INTO kontakte VALUES(null, ?, ?, ?)"
 				);
-
+				
 				stmt.setString(1, emailKontakt.getVorname());
 				stmt.setString(2, emailKontakt.getNachname());
 				stmt.setString(3, emailKontakt.getEmail());
+				stmt.executeUpdate();
+				
+				generatedKeys = stmt.getGeneratedKeys();
+				generatedKeys.next();
+				((EmailKontakt)emailKontakt).setID(generatedKeys.getInt(1));
 			}
 
 			// UPDATE
@@ -304,8 +331,8 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 				stmt.setString(1, emailKontakt.getNachname());
 				stmt.setString(1, emailKontakt.getEmail());
 				stmt.setInt(4, emailKontakt.getID());
+				stmt.executeUpdate();
 			}
-			stmt.executeUpdate();
 		}
 		catch(SQLException ex){
 			ex.printStackTrace();

@@ -12,6 +12,7 @@ import DataLayer.IDataLayer;
 /**
  *
  * @author lschomann
+ * @author Malte Engelhardt
  */
 public class DataLayerSqlite implements IDataLayer{
 

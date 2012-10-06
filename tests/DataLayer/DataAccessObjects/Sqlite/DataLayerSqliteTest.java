@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author malte
+ * @author Malte Engelhardt
  */
 public class DataLayerSqliteTest {
     
@@ -42,12 +42,8 @@ public class DataLayerSqliteTest {
      */
     @Test
     public void testGetEmailKontaktDao() {
-        System.out.println("getEmailKontaktDao");
         DataLayerSqlite instance = new DataLayerSqlite();
-        IEmailKontaktDAO expResult = null;
         IEmailKontaktDAO result = instance.getEmailKontaktDao();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertTrue(result instanceof EmailKontaktDaoSqlite);
     }
 }
