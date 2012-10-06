@@ -35,11 +35,7 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 		try{
 		    conn = getConnection();
             
-            stmt = conn.prepareStatement("SELECT name FROM sqlite_master WHERE type='table' AND name='kontakte';");
-            stmt.execute();
-            
-            // table exists, bail out
-            if (stmt.getResultSet().next()){
+            if (tableExists("kontakte")){
                 return;
             }
             
@@ -70,6 +66,22 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 			conn.close();
 		}
 	}
+    
+    /**
+     * 
+     * @author Malte Engelhardt
+     * @param name The name of the db table whose existence is to be checked.
+     * @return Whether the table with the supplied name exists in the db.
+     * 
+     */
+    public Boolean tableExists(String name) throws SQLException{
+        Connection conn = getConnection();
+        PreparedStatement stmt = conn.prepareStatement(
+            "SELECT name FROM sqlite_master WHERE type='table' AND name='kontakte';"
+        );
+        stmt.execute();
+        return stmt.getResultSet().next();
+    }
 	
 	public Connection getConnection(){
 		String connstr = "jdbc:sqlite:kontakte_db";
@@ -88,7 +100,14 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 		return conn;
 	}
 	
-	
+	/**
+     * 
+     * Creates an instance of a class implementing IEmailKontakt.
+     * 
+     * @author Malte Engelhardt
+     * @return 
+     * 
+     */
     @Override
     public IEmailKontakt create() {
         return new EmailKontakt(0, null, null, null);
