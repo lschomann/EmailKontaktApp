@@ -4,6 +4,10 @@
  */
 package DataLayer.Settings;
 
+import java.io.FileNotFoundException;
+
+import javax.xml.xpath.XPathExpressionException;
+
 /**
  *
  * @author lschomann
@@ -21,7 +25,7 @@ public class SettingsManager {
     public SettingsManager getInstance(){
         return instance;
     }
-    public String getPersistenceType(){
+    public String getPersistenceType() throws XPathExpressionException, FileNotFoundException{
         return persistenceSettings.getPersistenceType();
                 
     }

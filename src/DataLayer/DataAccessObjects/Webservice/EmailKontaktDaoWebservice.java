@@ -29,12 +29,12 @@ public class EmailKontaktDaoWebservice implements IEmailKontaktDAO{
     }
 
     @Override
-    public void first() {
+    public IEmailKontakt first() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public void last() {
+    public IEmailKontakt last() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -44,12 +44,12 @@ public class EmailKontaktDaoWebservice implements IEmailKontaktDAO{
     }
 
     @Override
-    public void next(IEmailKontakt emailKontakt) {
+    public IEmailKontakt next(IEmailKontakt emailKontakt) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public void previous(IEmailKontakt emailKontakt) {
+    public IEmailKontakt previous(IEmailKontakt emailKontakt) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

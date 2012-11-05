@@ -1,16 +1,17 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package DataLayer.Settings;
 
-import java.io.IOException;
-import org.w3c.dom.*;
-import org.xml.sax.SAXException;
-import javax.xml.parsers.*;
-import javax.xml.xpath.*;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+
+import org.w3c.dom.Attr;
+import org.xml.sax.InputSource;
 
 /**
+ * Get and Set the Persistence Setting Type
  *
  * @author lschomann
  */
@@ -18,21 +19,33 @@ public class PersistenceSettings {
     
     private String type;
 
-    public String getPersistenceType() throws ParserConfigurationException, SAXException, 
-    IOException, XPathExpressionException{
-    	
-    	DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
-    	domFactory.setNamespaceAware(true);
-    	DocumentBuilder docBuilder = domFactory.newDocumentBuilder();
-    	Document doc = docBuilder.parse("settings.xml");
+    
+    /**
+     * @return	type Returns the actual Value 
+     */
+    public String getPersistenceType() throws XPathExpressionException, FileNotFoundException{
     	
     	XPathFactory xpFactory = XPathFactory.newInstance();
     	XPath xpath = xpFactory.newXPath();
-    	XPathExpression xpExpr = xpath.compile("//settings[option=)
+    	
+    	Attr result = (Attr) xpath.evaluate("/settings/option/text()",new InputSource(new FileReader("settings.xml")),XPathConstants.NODE);
+    	type = result.getValue();
         return type;
     }
-    public void setPersistenceType(String type){
-        
+    
+    /**
+     * 
+     * @param type Sets the new Value
+     * @throws FileNotFoundException 
+     * @throws XPathExpressionException 
+     */
+    public void setPersistenceType(String type) throws XPathExpressionException, FileNotFoundException{
+    	
+    	XPathFactory xpFactory = XPathFactory.newInstance();
+    	XPath xpath = xpFactory.newXPath();
+    	
+    	Attr result = (Attr) xpath.evaluate("/settings/option/text()",new InputSource(new FileReader("settings.xml")),XPathConstants.NODE);
+    	result.setValue(type);
     }
     
 }
