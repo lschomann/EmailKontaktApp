@@ -1,25 +1,33 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package DataLayer;
 
+import DataLayer.Settings.SettingsManager;
+
+
 /**
+ *
  *
  * @author lschomann
  */
 public class DataLayerManager {
     
-    private DataLayerManager instance;
-    private DataLayer.IDataLayer dataLayer;
+	/** Privates Klassenattribut, einzige Instanz der Klasse erzeugen. */
+    private static DataLayerManager instance = new DataLayerManager();
+    private IDataLayer dataLayer;
     
+    /** Konstruktor ist privat, darf nicht von außen instanziiert werden. */
     private DataLayerManager(){
-        
+        getDataLayer();
     }
-    public DataLayerManager getInstance(){
-        return this.instance;
+    
+    /** Statische Methode „getInstance()“ liefert die einzige Instanz der Klasse zurück. */
+    public static DataLayerManager getInstance(){
+        return instance;
     }
+    
+    /** Fetch the DataLayer from SettingsManager */
     public IDataLayer getDataLayer(){
-        return this.dataLayer;
+    	SettingsManager _instance = SettingsManager.getInstance();
+        return _;
     }
 }

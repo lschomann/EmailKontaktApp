@@ -12,19 +12,26 @@ import javax.xml.xpath.XPathExpressionException;
  *
  * @author lschomann
  */
-public class SettingsManager {
-    private SettingsManager instance;
+public final class SettingsManager {
+	
+	/** Privates Klassenattribut, einzige Instanz der Klasse erzeugen. */
+    private final static SettingsManager instance = new SettingsManager();
     private PersistenceSettings persistenceSettings;
     
+    /** Konstruktor ist privat, darf nicht von außen instanziiert werden. */
     private void SettingsManager(){
         
     }
+    
     private PersistenceSettings readPersistenceSettings(){
         return persistenceSettings;
     }
-    public SettingsManager getInstance(){
+    
+    /** Statische Methode „getInstance()“ liefert die einzige Instanz der Klasse zurück. */
+    public static SettingsManager getInstance(){
         return instance;
     }
+    
     public String getPersistenceType() throws XPathExpressionException, FileNotFoundException{
         return persistenceSettings.getPersistenceType();
                 

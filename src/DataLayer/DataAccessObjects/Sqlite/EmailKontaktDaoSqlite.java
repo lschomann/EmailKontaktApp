@@ -47,7 +47,6 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 
 				stmt = conn.prepareStatement("CREATE TABLE kontakte(id integer primary key, vorname, nachname, email);");
 				stmt.execute();
-
             }
 			isInitialized = true;
 		}
