@@ -9,7 +9,7 @@ import DataLayer.DataAccessObjects.IEmailKontaktDAO;
 
 /**
  *
- * @author lschomann
+ * @author Lukas Schomann
  */
 public class EmailKontaktDaoWebservice implements IEmailKontaktDAO{
 

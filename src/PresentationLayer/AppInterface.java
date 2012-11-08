@@ -23,7 +23,7 @@ import DataLayer.DataLayerManager;
 */
 /**
  *
- * @author lschomann
+ * @author Lukas Schomann
  */
 public class AppInterface extends javax.swing.JFrame{
 

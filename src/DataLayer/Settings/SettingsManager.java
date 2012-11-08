@@ -1,39 +1,60 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package DataLayer.Settings;
 
-import java.io.FileNotFoundException;
 
+import java.io.IOException;
+
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
+
+import org.xml.sax.SAXException;
 
 /**
  *
- * @author lschomann
+ * @author Lukas Schomann
  */
-public final class SettingsManager {
+public class SettingsManager {
 	
-	/** Privates Klassenattribut, einzige Instanz der Klasse erzeugen. */
+	/** Private class attribute, single instance of this class.
+	 */
     private final static SettingsManager instance = new SettingsManager();
-    private PersistenceSettings persistenceSettings;
+    private PersistenceSettings persistenceSettings = new PersistenceSettings();
     
-    /** Konstruktor ist privat, darf nicht von außen instanziiert werden. */
-    private void SettingsManager(){
-        
+    /** Constructor is private, forbidden to instantiate from the outside. 
+     * @throws IOException 
+     * @throws SAXException 
+     * @throws ParserConfigurationException 
+     * @throws XPathExpressionException 
+     */
+    private SettingsManager() {
+        try {
+			this.getPersistenceType();
+		} catch (XPathExpressionException | ParserConfigurationException
+				| SAXException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
+    
     
     private PersistenceSettings readPersistenceSettings(){
         return persistenceSettings;
     }
     
-    /** Statische Methode „getInstance()“ liefert die einzige Instanz der Klasse zurück. */
+    /** Static method „getInstance()“ 
+     * 
+     * @return Returns the single instance of the class.
+     */
     public static SettingsManager getInstance(){
         return instance;
     }
     
-    public String getPersistenceType() throws XPathExpressionException, FileNotFoundException{
-        return persistenceSettings.getPersistenceType();
+
+    public String getPersistenceType() throws XPathExpressionException, ParserConfigurationException, SAXException, IOException {
+    	
+    	String Settings = persistenceSettings.getPersistenceType();
+
+		return Settings;
                 
     }
 }

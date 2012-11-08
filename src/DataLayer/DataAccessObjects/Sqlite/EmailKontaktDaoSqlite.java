@@ -24,7 +24,7 @@ import DataLayer.DataAccessObjects.Sqlite.Filter;
 
 /**
  *
- * @author lschomann
+ * @author Lukas Schomann
  * @author Malte Engelhardt
  */
 public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{

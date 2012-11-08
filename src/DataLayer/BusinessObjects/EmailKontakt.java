@@ -6,7 +6,7 @@ package DataLayer.BusinessObjects;
 
 /**
  *
- * @author lschomann
+ * @author Lukas Schomann
  * @author Malte Engelhardt
  */
 public class EmailKontakt implements BusinessObjects.IEmailKontakt{
