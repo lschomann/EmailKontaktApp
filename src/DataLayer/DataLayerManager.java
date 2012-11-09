@@ -8,6 +8,8 @@ import javax.xml.xpath.XPathExpressionException;
 
 import org.xml.sax.SAXException;
 
+import DataLayer.DataAccessObjects.Sqlite.DataLayerSqlite;
+import DataLayer.DataAccessObjects.Webservice.DataLayerWebservice;
 import DataLayer.Settings.SettingsManager;
 
 
@@ -44,10 +46,21 @@ public final class DataLayerManager {
      * @return 
      */
     public IDataLayer getDataLayer(){
-    	SettingsManager _instance = SettingsManager.getInstance();
     	
     	try {
-			System.out.println(_instance.getPersistenceType());
+    		// Get PersistenceType
+			String persistenceType = SettingsManager.getInstance().getPersistenceType();
+			// For webservice
+			if (persistenceType == "webservice"){
+				// Webservice start
+				dataLayer = new DataLayerWebservice();
+			}
+			// For DB
+			else if (persistenceType =="sqlite"){
+				// DB init
+				dataLayer = new DataLayerSqlite();
+			}
+			
 		} catch (XPathExpressionException | ParserConfigurationException
 				| SAXException | IOException e) {
 			// TODO Auto-generated catch block
