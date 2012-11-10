@@ -6,7 +6,7 @@ package DataLayer;
 
 /**
  *
- * @author lschomann
+ * @author Lukas Schomann
  */
 public interface IDataLayer {
     public DataLayer.DataAccessObjects.IEmailKontaktDAO getEmailKontaktDao();

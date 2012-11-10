@@ -24,7 +24,7 @@ import DataLayer.DataAccessObjects.Sqlite.Filter;
 
 /**
  *
- * @author lschomann
+ * @author Lukas Schomann
  * @author Malte Engelhardt
  */
 public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
@@ -47,7 +47,6 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 
 				stmt = conn.prepareStatement("CREATE TABLE kontakte(id integer primary key, vorname, nachname, email);");
 				stmt.execute();
-
             }
 			isInitialized = true;
 		}
