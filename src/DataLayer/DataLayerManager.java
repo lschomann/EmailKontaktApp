@@ -51,21 +51,36 @@ public final class DataLayerManager {
     		// Get PersistenceType
 			String persistenceType = SettingsManager.getInstance().getPersistenceType();
 			// For webservice
-			if (persistenceType == "webservice"){
+			if (persistenceType.equals("webservice")){
 				// Webservice start
 				dataLayer = new DataLayerWebservice();
 			}
 			// For DB
-			else if (persistenceType =="sqlite"){
+			else if (persistenceType.equals("sqlite")){
 				// DB init
 				dataLayer = new DataLayerSqlite();
 			}
 			
-		} catch (XPathExpressionException | ParserConfigurationException
-				| SAXException | IOException e) {
+		}
+    	catch (XPathExpressionException e)
+		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+        catch (ParserConfigurationException e)
+        {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+        }
+        catch(IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        catch(SAXException e)
+        {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+        }
     	
         return this.dataLayer;
     }

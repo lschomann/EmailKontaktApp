@@ -29,11 +29,25 @@ public class SettingsManager {
     private SettingsManager() {
         try {
 			this.getPersistenceType();
-		} catch (XPathExpressionException | ParserConfigurationException
-				| SAXException | IOException e) {
+		} catch (XPathExpressionException e)
+		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+        catch (ParserConfigurationException e)
+        {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+        }
+        catch(IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        catch(SAXException e)
+        {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+        }
     }
     
     
