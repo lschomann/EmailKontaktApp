@@ -8,6 +8,7 @@ import javax.swing.JButton;
 import javax.swing.LayoutStyle;
 
 import DataLayer.DataLayerManager;
+import DataLayer.DataAccessObjects.IEmailKontaktDAO;
 
 /**
 * This code was edited or generated using CloudGarden's Jigloo
@@ -79,10 +80,12 @@ public class AppInterface extends javax.swing.JFrame{
         {
         	prev_btn = new JButton();
         	prev_btn.setText("<-");
+        	prev_btn.setSize(50, 20);
         }
         {
         	next_btn = new JButton();
         	next_btn.setText("->");
+        	next_btn.setSize(50, 20);
         }
 
         file_menu.setText("File");
@@ -106,8 +109,8 @@ public class AppInterface extends javax.swing.JFrame{
         	.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
         	    .addComponent(id_txt, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
         	    .addComponent(id_lbl, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-        	    .addComponent(next_btn, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-        	    .addComponent(prev_btn, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+        	    .addComponent(next_btn, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
+        	    .addComponent(prev_btn, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE))
         	.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
         	.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
         	    .addComponent(vorname_txt, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -120,7 +123,7 @@ public class AppInterface extends javax.swing.JFrame{
         	.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
         	    .addComponent(email_txt, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
         	    .addComponent(email_lbl, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-        	.addContainerGap());
+        	.addContainerGap(21, 21));
         layout.setHorizontalGroup(layout.createSequentialGroup()
         	.addContainerGap()
         	.addGroup(layout.createParallelGroup()
@@ -135,31 +138,29 @@ public class AppInterface extends javax.swing.JFrame{
         	                    .addGroup(GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
         	                        .addPreferredGap(email_lbl, id_lbl, LayoutStyle.ComponentPlacement.INDENT)
         	                        .addComponent(id_lbl, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-        	                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)))))
+        	                        .addGap(9)))
+        	                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)))
         	        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
         	        .addGroup(layout.createParallelGroup()
         	            .addGroup(layout.createSequentialGroup()
-        	                .addComponent(email_txt, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
-        	                .addGap(0, 0, Short.MAX_VALUE))
+        	                .addComponent(email_txt, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE))
         	            .addGroup(layout.createSequentialGroup()
-        	                .addComponent(name_txt, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
-        	                .addGap(0, 0, Short.MAX_VALUE))
+        	                .addComponent(name_txt, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE))
         	            .addGroup(layout.createSequentialGroup()
-        	                .addComponent(vorname_txt, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
-        	                .addGap(0, 0, Short.MAX_VALUE))
+        	                .addComponent(vorname_txt, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE))
         	            .addGroup(GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
         	                .addComponent(id_txt, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
-        	                .addGap(0, 80, Short.MAX_VALUE)
-        	                .addComponent(prev_btn, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
-        	                .addGap(0, 52, GroupLayout.PREFERRED_SIZE))))
+        	                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+        	                .addComponent(prev_btn, GroupLayout.PREFERRED_SIZE, 84, GroupLayout.PREFERRED_SIZE)
+        	                .addComponent(next_btn, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)))
+        	        .addGap(0, 0, Short.MAX_VALUE))
         	    .addGroup(GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
         	        .addComponent(header_lbl, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-        	        .addComponent(next_btn, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE)
-        	        .addGap(0, 8, Short.MAX_VALUE)))
-        	.addContainerGap(38, 38));
+        	        .addGap(0, 52, Short.MAX_VALUE)))
+        	.addContainerGap(19, 19));
 
         pack();
-        this.setSize(316, 230);
+        this.setSize(310, 254);
     }// </editor-fold>//GEN-END:initComponents
 
     /**
@@ -197,7 +198,7 @@ public class AppInterface extends javax.swing.JFrame{
                 
                 /** Main Routine */
                 DataLayerManager _instance = DataLayerManager.getInstance();
-                System.out.println(_instance);
+                _instance.getDataLayer().getEmailKontaktDao();
             }
         });
     }
