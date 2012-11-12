@@ -16,8 +16,6 @@ import java.sql.SQLException;
 import java.sql.DriverManager;
 
 import java.util.LinkedList;
-import java.util.AbstractMap;
-import java.util.HashMap;
 
 import DataLayer.DataAccessObjects.Sqlite.Filter;
 
@@ -49,6 +47,18 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 				stmt.execute();
             }
 			isInitialized = true;
+			/*
+			 * ONLY FOR TESTING
+			 */
+			IEmailKontakt donald;
+			donald = create();
+			donald.setVorname("Donald");
+			donald.setNachname("Duck");
+			donald.setEmail("donald@quackburg.com");
+			save(donald);
+			/*
+			 * 
+			 */
 		}
 		catch(Exception ex){
 			ex.printStackTrace();
