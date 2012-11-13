@@ -103,8 +103,6 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 		boolean exists = stmt.getResultSet().next();
 		conn.close();
 		
-		System.out.println("testSelect_0args: conn status=" + Boolean.toString(conn.isClosed()));
-		
         return exists;
     }
 	
@@ -239,6 +237,16 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
             throw new NoEmailKontaktFoundException();
         }
 		return objs[0];
+    }
+    
+    @Override
+    public IEmailKontakt[] select(String criterion){
+		IEmailKontakt[] objs = select();
+		List<IEmailKontakt> remaining = new LinkedList<IEmailKontakt>();
+		
+		for(IEmailKontakt o: objs){
+			if (o.)
+		}
     }
 	
     @Override

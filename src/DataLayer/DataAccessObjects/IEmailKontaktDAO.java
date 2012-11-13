@@ -19,6 +19,7 @@ public interface IEmailKontaktDAO {
     public IEmailKontakt create();
     public IEmailKontakt[] select();
     public IEmailKontakt select(int id) throws NoEmailKontaktFoundException;
+    public IEmailKontakt[] select(String criterion);
     public IEmailKontakt first() throws NoEmailKontaktFoundException ;
     public IEmailKontakt last() throws NoEmailKontaktFoundException ;
     public void delete(IEmailKontakt emailKontakt);

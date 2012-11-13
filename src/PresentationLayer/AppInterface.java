@@ -498,7 +498,7 @@ public class AppInterface extends javax.swing.JFrame {
 	
 	private void search_txtKeyPressed(KeyEvent evt) {
 		System.out.println("search_txt.keyPressed, event="+evt);
-		dao.fir
+		
 	}
 
 	// Variables declaration - do not modify//GEN-BEGIN:variables
