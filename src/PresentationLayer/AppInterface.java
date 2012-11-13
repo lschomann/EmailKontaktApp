@@ -22,6 +22,7 @@ import DataLayer.BusinessObjects.EmailKontakt;
 import DataLayer.DataAccessObjects.IEmailKontaktDAO;
 import Exceptions.NoEmailKontaktFoundException;
 import Exceptions.NoNextEmailKontaktFoundException;
+import Exceptions.NoPreviousEmailKontaktFoundException;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -101,7 +102,12 @@ public class AppInterface extends javax.swing.JFrame {
 			prev_btn.setText("<-");
 			prev_btn.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent evt) {
-					prev_btnMouseClicked(evt);
+					try {
+						prev_btnMouseClicked(evt);
+					} catch (NoPreviousEmailKontaktFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			});
 		}
@@ -110,7 +116,12 @@ public class AppInterface extends javax.swing.JFrame {
 			next_btn.setText("->");
 			next_btn.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent evt) {
-					next_btnMouseClicked(evt);
+					try {
+						next_btnMouseClicked(evt);
+					} catch (NoNextEmailKontaktFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			});
 		}
@@ -279,20 +290,20 @@ public class AppInterface extends javax.swing.JFrame {
 		});
 	}
 
-	private void next_btnMouseClicked(MouseEvent evt) {
+	private void next_btnMouseClicked(MouseEvent evt) throws NoNextEmailKontaktFoundException {
 		System.out.println("next_btn mouseClicked");
-
+		update(dao.next(getCurrent()));
 	}
 
-	private void prev_btnMouseClicked(MouseEvent evt) {
+	private void prev_btnMouseClicked(MouseEvent evt) throws NoPreviousEmailKontaktFoundException {
 		System.out.println("prev_btn mouseClicked");
-		// TODO add your code for prev_btn.mouseClicked
+		update(dao.previous(getCurrent()));
 	}
 
 	private void thisWindowOpened(WindowEvent evt) throws NoEmailKontaktFoundException {
 		System.out.println("Window opend");
 		IEmailKontakt baseEntry = dao.first();
-		add_to_txtFields(baseEntry);
+		update(baseEntry);
 
 
 	}
@@ -324,25 +335,41 @@ public class AppInterface extends javax.swing.JFrame {
 	private void edit_new_entryActionPerformed(ActionEvent evt) {
 		System.out.println("edit_new_entry actionPerformed");
 	
-		create_new_entry();
+		update(create_new_entry());
 	}
 	
 	// Help methods
-	private void create_new_entry() {
+	private IEmailKontakt create_new_entry() {
 		
 		IEmailKontakt k = dao.create();
 		dao.save(k);
-		add_to_txtFields(k);
+		update(k);
+		return k;
 	}
 	
+	
+	private IEmailKontakt current_kontakt;
+	
 	// Add IEmailKontakt Objekt to txt Fields 
-	private void add_to_txtFields(IEmailKontakt t) {
+	private void update(IEmailKontakt t) {
 		this.id_txt.setText(Integer.toString(t.getID()));
 		this.vorname_txt.setText(t.getVorname());
 		this.name_txt.setText(t.getNachname());
 		this.email_txt.setText(t.getEmail());
+		this.setCurrent(t);
 	}
 	
+	// Return the current set contact
+	private IEmailKontakt getCurrent(){
+		
+		return this.current_kontakt;
+	}
+	
+	// Set the current contact to current_kontakt
+	private void setCurrent(IEmailKontakt k)
+	{
+		this.current_kontakt = k;
+	}
 
 	// Variables declaration - do not modify//GEN-BEGIN:variables
 	private javax.swing.JLabel email_lbl;

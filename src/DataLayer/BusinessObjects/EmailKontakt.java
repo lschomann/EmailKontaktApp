@@ -29,7 +29,7 @@ public class EmailKontakt implements BusinessObjects.IEmailKontakt{
        return id;
     }
     public String getVorname() {
-        
+       
         return  vorname;
     }
     public String getNachname() {
