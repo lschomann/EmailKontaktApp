@@ -10,7 +10,6 @@ import javax.swing.JMenuItem;
 import javax.swing.LayoutStyle;
 import javax.swing.JOptionPane;
 
-
 import BusinessObjects.IEmailKontakt;
 import DataLayer.DataLayerManager;
 import java.awt.event.MouseAdapter;
@@ -26,6 +25,9 @@ import Exceptions.NoPreviousEmailKontaktFoundException;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.sql.Savepoint;
 
 /**
  * This code was edited or generated using CloudGarden's Jigloo
@@ -70,8 +72,23 @@ public class AppInterface extends javax.swing.JFrame {
 	private void initComponents() {
 
 		vorname_txt = new javax.swing.JTextField();
+		vorname_txt.addFocusListener(new FocusAdapter() {
+			public void focusLost(FocusEvent evt) {
+				vorname_txtFocusLost(evt);
+			}
+		});
 		name_txt = new javax.swing.JTextField();
+		name_txt.addFocusListener(new FocusAdapter() {
+			public void focusLost(FocusEvent evt) {
+				name_txtFocusLost(evt);
+			}
+		});
 		email_txt = new javax.swing.JTextField();
+		email_txt.addFocusListener(new FocusAdapter() {
+			public void focusLost(FocusEvent evt) {
+				email_txtFocusLost(evt);
+			}
+		});
 		vorname_lbl = new javax.swing.JLabel();
 		name_lbl = new javax.swing.JLabel();
 		email_lbl = new javax.swing.JLabel();
@@ -133,7 +150,7 @@ public class AppInterface extends javax.swing.JFrame {
 			end_program = new JMenuItem();
 			file_menu.add(end_program);
 			end_program.setText("Quit");
-			end_program.addActionListener(new ActionListener()  {
+			end_program.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent evt) {
 					try {
 						end_programActionPerformed(evt);
@@ -151,6 +168,7 @@ public class AppInterface extends javax.swing.JFrame {
 		{
 			edit_new_entry = new JMenuItem();
 			jMenu2.add(edit_new_entry);
+			jMenu2.add(getDelete_entry());
 			edit_new_entry.setText("New");
 			edit_new_entry.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent evt) {
@@ -164,65 +182,192 @@ public class AppInterface extends javax.swing.JFrame {
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(
 				getContentPane());
 		getContentPane().setLayout(layout);
-		layout.setVerticalGroup(layout.createSequentialGroup()
-			.addContainerGap()
-			.addComponent(header_lbl, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-			.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-			.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-			    .addComponent(prev_btn, GroupLayout.Alignment.BASELINE, 0, 26, Short.MAX_VALUE)
-			    .addComponent(id_txt, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-			    .addComponent(id_lbl, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-			    .addComponent(next_btn, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-			.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-			.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-			    .addComponent(vorname_txt, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-			    .addComponent(vorname_lbl, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-			.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-			.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-			    .addComponent(name_txt, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-			    .addComponent(name_lbl, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-			.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-			.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-			    .addComponent(email_txt, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-			    .addComponent(email_lbl, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-			.addContainerGap(24, 24));
-		layout.setHorizontalGroup(layout.createSequentialGroup()
-			.addContainerGap()
-			.addGroup(layout.createParallelGroup()
-			    .addGroup(layout.createSequentialGroup()
-			        .addGroup(layout.createParallelGroup()
-			            .addComponent(vorname_lbl, GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-			            .addGroup(layout.createSequentialGroup()
-			                .addPreferredGap(vorname_lbl, email_lbl, LayoutStyle.ComponentPlacement.INDENT)
-			                .addGroup(layout.createParallelGroup()
-			                    .addComponent(email_lbl, GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-			                    .addComponent(name_lbl, GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-			                    .addGroup(GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-			                        .addPreferredGap(email_lbl, id_lbl, LayoutStyle.ComponentPlacement.INDENT)
-			                        .addComponent(id_lbl, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-			                        .addGap(9)))
-			                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)))
-			        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-			        .addGroup(layout.createParallelGroup()
-			            .addGroup(layout.createSequentialGroup()
-			                .addComponent(email_txt, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
-			                .addGap(0, 0, Short.MAX_VALUE))
-			            .addGroup(layout.createSequentialGroup()
-			                .addComponent(name_txt, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
-			                .addGap(0, 0, Short.MAX_VALUE))
-			            .addGroup(layout.createSequentialGroup()
-			                .addComponent(vorname_txt, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
-			                .addGap(0, 0, Short.MAX_VALUE))
-			            .addGroup(GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-			                .addComponent(id_txt, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
-			                .addGap(76)
-			                .addComponent(prev_btn, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)
-			                .addComponent(next_btn, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE)
-			                .addGap(0, 13, Short.MAX_VALUE))))
-			    .addGroup(GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-			        .addComponent(header_lbl, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-			        .addGap(0, 52, Short.MAX_VALUE)))
-			.addContainerGap(25, 25));
+		layout.setVerticalGroup(layout
+				.createSequentialGroup()
+				.addContainerGap()
+				.addComponent(header_lbl, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+				.addGroup(
+						layout.createParallelGroup(
+								GroupLayout.Alignment.BASELINE)
+								.addComponent(prev_btn,
+										GroupLayout.Alignment.BASELINE, 0, 26,
+										Short.MAX_VALUE)
+								.addComponent(id_txt,
+										GroupLayout.Alignment.BASELINE,
+										GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(id_lbl,
+										GroupLayout.Alignment.BASELINE,
+										GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(next_btn,
+										GroupLayout.Alignment.BASELINE,
+										GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE))
+				.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+				.addGroup(
+						layout.createParallelGroup(
+								GroupLayout.Alignment.BASELINE)
+								.addComponent(vorname_txt,
+										GroupLayout.Alignment.BASELINE,
+										GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(vorname_lbl,
+										GroupLayout.Alignment.BASELINE,
+										GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE))
+				.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+				.addGroup(
+						layout.createParallelGroup(
+								GroupLayout.Alignment.BASELINE)
+								.addComponent(name_txt,
+										GroupLayout.Alignment.BASELINE,
+										GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(name_lbl,
+										GroupLayout.Alignment.BASELINE,
+										GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE))
+				.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+				.addGroup(
+						layout.createParallelGroup(
+								GroupLayout.Alignment.BASELINE)
+								.addComponent(email_txt,
+										GroupLayout.Alignment.BASELINE,
+										GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(email_lbl,
+										GroupLayout.Alignment.BASELINE,
+										GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE))
+				.addContainerGap(24, 24));
+		layout.setHorizontalGroup(layout
+				.createSequentialGroup()
+				.addContainerGap()
+				.addGroup(
+						layout.createParallelGroup()
+								.addGroup(
+										layout.createSequentialGroup()
+												.addGroup(
+														layout.createParallelGroup()
+																.addComponent(
+																		vorname_lbl,
+																		GroupLayout.Alignment.LEADING,
+																		GroupLayout.PREFERRED_SIZE,
+																		GroupLayout.PREFERRED_SIZE,
+																		GroupLayout.PREFERRED_SIZE)
+																.addGroup(
+																		layout.createSequentialGroup()
+																				.addPreferredGap(
+																						vorname_lbl,
+																						email_lbl,
+																						LayoutStyle.ComponentPlacement.INDENT)
+																				.addGroup(
+																						layout.createParallelGroup()
+																								.addComponent(
+																										email_lbl,
+																										GroupLayout.Alignment.LEADING,
+																										GroupLayout.PREFERRED_SIZE,
+																										GroupLayout.PREFERRED_SIZE,
+																										GroupLayout.PREFERRED_SIZE)
+																								.addComponent(
+																										name_lbl,
+																										GroupLayout.Alignment.LEADING,
+																										GroupLayout.PREFERRED_SIZE,
+																										GroupLayout.PREFERRED_SIZE,
+																										GroupLayout.PREFERRED_SIZE)
+																								.addGroup(
+																										GroupLayout.Alignment.LEADING,
+																										layout.createSequentialGroup()
+																												.addPreferredGap(
+																														email_lbl,
+																														id_lbl,
+																														LayoutStyle.ComponentPlacement.INDENT)
+																												.addComponent(
+																														id_lbl,
+																														GroupLayout.PREFERRED_SIZE,
+																														GroupLayout.PREFERRED_SIZE,
+																														GroupLayout.PREFERRED_SIZE)
+																												.addGap(9)))
+																				.addPreferredGap(
+																						LayoutStyle.ComponentPlacement.RELATED)))
+												.addPreferredGap(
+														LayoutStyle.ComponentPlacement.RELATED)
+												.addGroup(
+														layout.createParallelGroup()
+																.addGroup(
+																		layout.createSequentialGroup()
+																				.addComponent(
+																						email_txt,
+																						GroupLayout.PREFERRED_SIZE,
+																						200,
+																						GroupLayout.PREFERRED_SIZE)
+																				.addGap(0,
+																						0,
+																						Short.MAX_VALUE))
+																.addGroup(
+																		layout.createSequentialGroup()
+																				.addComponent(
+																						name_txt,
+																						GroupLayout.PREFERRED_SIZE,
+																						200,
+																						GroupLayout.PREFERRED_SIZE)
+																				.addGap(0,
+																						0,
+																						Short.MAX_VALUE))
+																.addGroup(
+																		layout.createSequentialGroup()
+																				.addComponent(
+																						vorname_txt,
+																						GroupLayout.PREFERRED_SIZE,
+																						200,
+																						GroupLayout.PREFERRED_SIZE)
+																				.addGap(0,
+																						0,
+																						Short.MAX_VALUE))
+																.addGroup(
+																		GroupLayout.Alignment.LEADING,
+																		layout.createSequentialGroup()
+																				.addComponent(
+																						id_txt,
+																						GroupLayout.PREFERRED_SIZE,
+																						30,
+																						GroupLayout.PREFERRED_SIZE)
+																				.addGap(76)
+																				.addComponent(
+																						prev_btn,
+																						GroupLayout.PREFERRED_SIZE,
+																						42,
+																						GroupLayout.PREFERRED_SIZE)
+																				.addComponent(
+																						next_btn,
+																						GroupLayout.PREFERRED_SIZE,
+																						39,
+																						GroupLayout.PREFERRED_SIZE)
+																				.addGap(0,
+																						13,
+																						Short.MAX_VALUE))))
+								.addGroup(
+										GroupLayout.Alignment.LEADING,
+										layout.createSequentialGroup()
+												.addComponent(
+														header_lbl,
+														GroupLayout.PREFERRED_SIZE,
+														GroupLayout.PREFERRED_SIZE,
+														GroupLayout.PREFERRED_SIZE)
+												.addGap(0, 52, Short.MAX_VALUE)))
+				.addContainerGap(25, 25));
 		this.addWindowListener(new WindowAdapter() {
 			public void windowOpened(WindowEvent evt) {
 				try {
@@ -238,8 +383,6 @@ public class AppInterface extends javax.swing.JFrame {
 		this.setSize(316, 258);
 	}// </editor-fold>//GEN-END:initComponents
 
-	
-	
 	/**
 	 * @param args
 	 *            the command line arguments
@@ -290,43 +433,38 @@ public class AppInterface extends javax.swing.JFrame {
 		});
 	}
 
-	private void next_btnMouseClicked(MouseEvent evt) throws NoNextEmailKontaktFoundException {
+	private void next_btnMouseClicked(MouseEvent evt)
+			throws NoNextEmailKontaktFoundException {
 		System.out.println("next_btn mouseClicked");
 		update(dao.next(getCurrent()));
 	}
 
-	private void prev_btnMouseClicked(MouseEvent evt) throws NoPreviousEmailKontaktFoundException {
+	private void prev_btnMouseClicked(MouseEvent evt)
+			throws NoPreviousEmailKontaktFoundException {
 		System.out.println("prev_btn mouseClicked");
 		update(dao.previous(getCurrent()));
 	}
 
-	private void thisWindowOpened(WindowEvent evt) throws NoEmailKontaktFoundException {
+	private void thisWindowOpened(WindowEvent evt)
+			throws NoEmailKontaktFoundException {
 		System.out.println("Window opend");
 		IEmailKontakt baseEntry = dao.first();
 		update(baseEntry);
 
-
 	}
 
-	private void end_programActionPerformed(ActionEvent evt) throws NoEmailKontaktFoundException {
+	private void end_programActionPerformed(ActionEvent evt)
+			throws NoEmailKontaktFoundException {
 		System.out.println("end_program actionPerformed");
-		
-		//Show dialog if user want to save state
-		int n = JOptionPane.showConfirmDialog(
-			    this,
-			    "Save your changes?",
-			    "Really quit?",
-			    JOptionPane.YES_NO_OPTION);
-		if(n == JOptionPane.YES_OPTION){
 
-				int id = Integer.parseInt(this.id_txt.getText());
-				IEmailKontakt c = dao.select(id);
-				c.setEmail(this.email_txt.getText());
-				c.setVorname(this.vorname_txt.getText());
-				c.setNachname(this.name_txt.getText());
-				
-				
-				dao.save(c);
+		// Show dialog if user want to save state
+		int n = JOptionPane.showConfirmDialog(this, "Save your changes?",
+				"Really quit?", JOptionPane.YES_NO_OPTION);
+		if (n == JOptionPane.YES_OPTION) {
+
+			IEmailKontakt c = getContact();
+
+			dao.save(c);
 
 		}
 
@@ -334,23 +472,22 @@ public class AppInterface extends javax.swing.JFrame {
 
 	private void edit_new_entryActionPerformed(ActionEvent evt) {
 		System.out.println("edit_new_entry actionPerformed");
-	
+
 		update(create_new_entry());
 	}
-	
+
 	// Help methods
 	private IEmailKontakt create_new_entry() {
-		
+
 		IEmailKontakt k = dao.create();
 		dao.save(k);
 		update(k);
 		return k;
 	}
-	
-	
+
 	private IEmailKontakt current_kontakt;
-	
-	// Add IEmailKontakt Objekt to txt Fields 
+
+	// Add IEmailKontakt Objekt to txt Fields
 	private void update(IEmailKontakt t) {
 		this.id_txt.setText(Integer.toString(t.getID()));
 		this.vorname_txt.setText(t.getVorname());
@@ -358,17 +495,94 @@ public class AppInterface extends javax.swing.JFrame {
 		this.email_txt.setText(t.getEmail());
 		this.setCurrent(t);
 	}
-	
+
+	// Create IEmailKontakt Object
+	private IEmailKontakt getContact() {
+		int id = Integer.parseInt(this.id_txt.getText());
+		IEmailKontakt c = null;
+		try {
+			c = dao.select(id);
+		} catch (NoEmailKontaktFoundException e) {
+			c = dao.create();
+		}
+		c.setEmail(this.email_txt.getText());
+		c.setVorname(this.vorname_txt.getText());
+		c.setNachname(this.name_txt.getText());
+
+		return c;
+	}
+
 	// Return the current set contact
-	private IEmailKontakt getCurrent(){
-		
+	private IEmailKontakt getCurrent() {
+
 		return this.current_kontakt;
 	}
-	
+
 	// Set the current contact to current_kontakt
-	private void setCurrent(IEmailKontakt k)
-	{
+	private void setCurrent(IEmailKontakt k) {
 		this.current_kontakt = k;
+	}
+
+	private void vorname_txtFocusLost(FocusEvent evt) {
+		System.out.println("vorname_txt focusLost");
+
+		IEmailKontakt k = getContact();
+		dao.save(k);
+	}
+
+	private void name_txtFocusLost(FocusEvent evt) {
+		System.out.println("name_txt focusLost");
+
+		IEmailKontakt k = getContact();
+		dao.save(k);
+	}
+
+	private void email_txtFocusLost(FocusEvent evt) {
+		System.out.println("email_txt focusLost");
+
+		IEmailKontakt k = getContact();
+		dao.save(k);
+	}
+
+	private JMenuItem getDelete_entry() {
+		if (delete_entry == null) {
+			delete_entry = new JMenuItem();
+			delete_entry.setText("Delete");
+			delete_entry.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent evt) {
+					try {
+						delete_entryActionPerformed(evt);
+					} catch (NoNextEmailKontaktFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			});
+		}
+		return delete_entry;
+	}
+
+	private void delete_entryActionPerformed(ActionEvent evt) throws NoNextEmailKontaktFoundException {
+		System.out.println("delete_entry actionPerformed");
+		IEmailKontakt k = getCurrent();
+		try {
+			update(dao.next(k));
+		}
+		catch(NoNextEmailKontaktFoundException e) {
+			try {
+				update(dao.previous(k));
+			}
+			catch(NoPreviousEmailKontaktFoundException f) {
+				update(this.getContact());
+				
+			}
+		}
+		finally{
+			dao.delete(k);
+		}
+		
+		
+		
 	}
 
 	// Variables declaration - do not modify//GEN-BEGIN:variables
@@ -380,6 +594,7 @@ public class AppInterface extends javax.swing.JFrame {
 	private javax.swing.JTextField id_txt;
 	private javax.swing.JMenu jMenu2;
 	private javax.swing.JMenuBar menuBar;
+	private JMenuItem delete_entry;
 	private JMenuItem end_program;
 	private JMenuItem edit_new_entry;
 	private JButton prev_btn;

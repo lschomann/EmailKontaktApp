@@ -45,20 +45,21 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 
 				stmt = conn.prepareStatement("CREATE TABLE kontakte(id integer primary key, vorname, nachname, email);");
 				stmt.execute();
+				save(create());
             }
 			isInitialized = true;
-			/*
-			 * ONLY FOR TESTING
-			 */
-			IEmailKontakt donald;
-			donald = create();
-			donald.setVorname("Donald");
-			donald.setNachname("Duck");
-			donald.setEmail("donald@quackburg.com");
-			save(donald);
-			/*
-			 * 
-			 */
+//			/*
+//			 * ONLY FOR TESTING
+//			 */
+//			IEmailKontakt donald;
+//			donald = create();
+//			donald.setVorname("Donald");
+//			donald.setNachname("Duck");
+//			donald.setEmail("donald@quackburg.com");
+//			save(donald);
+//			/*
+//			 * 
+//			 */
 		}
 		catch(Exception ex){
 			ex.printStackTrace();
@@ -356,8 +357,8 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 					"UPDATE kontakte SET vorname = ?, nachname = ?, email = ? WHERE id = ?"
 				);
 				stmt.setString(1, emailKontakt.getVorname());
-				stmt.setString(1, emailKontakt.getNachname());
-				stmt.setString(1, emailKontakt.getEmail());
+				stmt.setString(2, emailKontakt.getNachname());
+				stmt.setString(3, emailKontakt.getEmail());
 				stmt.setInt(4, emailKontakt.getID());
 				stmt.executeUpdate();
 			}
