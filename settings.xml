@@ -1,4 +1,4 @@
 <?xml version="1.0"?>
 <settings>
-	<option>webservice</option>
+	<option>sqlite</option>
 </settings>
