@@ -6,9 +6,11 @@ package PresentationLayer;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.LayoutStyle;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 import BusinessObjects.IEmailKontakt;
 import DataLayer.DataLayerManager;
@@ -27,6 +29,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.sql.Savepoint;
 
 /**
@@ -182,192 +186,79 @@ public class AppInterface extends javax.swing.JFrame {
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(
 				getContentPane());
 		getContentPane().setLayout(layout);
-		layout.setVerticalGroup(layout
-				.createSequentialGroup()
-				.addContainerGap()
-				.addComponent(header_lbl, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-				.addGroup(
-						layout.createParallelGroup(
-								GroupLayout.Alignment.BASELINE)
-								.addComponent(prev_btn,
-										GroupLayout.Alignment.BASELINE, 0, 26,
-										Short.MAX_VALUE)
-								.addComponent(id_txt,
-										GroupLayout.Alignment.BASELINE,
-										GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(id_lbl,
-										GroupLayout.Alignment.BASELINE,
-										GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(next_btn,
-										GroupLayout.Alignment.BASELINE,
-										GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-				.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-				.addGroup(
-						layout.createParallelGroup(
-								GroupLayout.Alignment.BASELINE)
-								.addComponent(vorname_txt,
-										GroupLayout.Alignment.BASELINE,
-										GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(vorname_lbl,
-										GroupLayout.Alignment.BASELINE,
-										GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-				.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-				.addGroup(
-						layout.createParallelGroup(
-								GroupLayout.Alignment.BASELINE)
-								.addComponent(name_txt,
-										GroupLayout.Alignment.BASELINE,
-										GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(name_lbl,
-										GroupLayout.Alignment.BASELINE,
-										GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-				.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-				.addGroup(
-						layout.createParallelGroup(
-								GroupLayout.Alignment.BASELINE)
-								.addComponent(email_txt,
-										GroupLayout.Alignment.BASELINE,
-										GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(email_lbl,
-										GroupLayout.Alignment.BASELINE,
-										GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-				.addContainerGap(24, 24));
-		layout.setHorizontalGroup(layout
-				.createSequentialGroup()
-				.addContainerGap()
-				.addGroup(
-						layout.createParallelGroup()
-								.addGroup(
-										layout.createSequentialGroup()
-												.addGroup(
-														layout.createParallelGroup()
-																.addComponent(
-																		vorname_lbl,
-																		GroupLayout.Alignment.LEADING,
-																		GroupLayout.PREFERRED_SIZE,
-																		GroupLayout.PREFERRED_SIZE,
-																		GroupLayout.PREFERRED_SIZE)
-																.addGroup(
-																		layout.createSequentialGroup()
-																				.addPreferredGap(
-																						vorname_lbl,
-																						email_lbl,
-																						LayoutStyle.ComponentPlacement.INDENT)
-																				.addGroup(
-																						layout.createParallelGroup()
-																								.addComponent(
-																										email_lbl,
-																										GroupLayout.Alignment.LEADING,
-																										GroupLayout.PREFERRED_SIZE,
-																										GroupLayout.PREFERRED_SIZE,
-																										GroupLayout.PREFERRED_SIZE)
-																								.addComponent(
-																										name_lbl,
-																										GroupLayout.Alignment.LEADING,
-																										GroupLayout.PREFERRED_SIZE,
-																										GroupLayout.PREFERRED_SIZE,
-																										GroupLayout.PREFERRED_SIZE)
-																								.addGroup(
-																										GroupLayout.Alignment.LEADING,
-																										layout.createSequentialGroup()
-																												.addPreferredGap(
-																														email_lbl,
-																														id_lbl,
-																														LayoutStyle.ComponentPlacement.INDENT)
-																												.addComponent(
-																														id_lbl,
-																														GroupLayout.PREFERRED_SIZE,
-																														GroupLayout.PREFERRED_SIZE,
-																														GroupLayout.PREFERRED_SIZE)
-																												.addGap(9)))
-																				.addPreferredGap(
-																						LayoutStyle.ComponentPlacement.RELATED)))
-												.addPreferredGap(
-														LayoutStyle.ComponentPlacement.RELATED)
-												.addGroup(
-														layout.createParallelGroup()
-																.addGroup(
-																		layout.createSequentialGroup()
-																				.addComponent(
-																						email_txt,
-																						GroupLayout.PREFERRED_SIZE,
-																						200,
-																						GroupLayout.PREFERRED_SIZE)
-																				.addGap(0,
-																						0,
-																						Short.MAX_VALUE))
-																.addGroup(
-																		layout.createSequentialGroup()
-																				.addComponent(
-																						name_txt,
-																						GroupLayout.PREFERRED_SIZE,
-																						200,
-																						GroupLayout.PREFERRED_SIZE)
-																				.addGap(0,
-																						0,
-																						Short.MAX_VALUE))
-																.addGroup(
-																		layout.createSequentialGroup()
-																				.addComponent(
-																						vorname_txt,
-																						GroupLayout.PREFERRED_SIZE,
-																						200,
-																						GroupLayout.PREFERRED_SIZE)
-																				.addGap(0,
-																						0,
-																						Short.MAX_VALUE))
-																.addGroup(
-																		GroupLayout.Alignment.LEADING,
-																		layout.createSequentialGroup()
-																				.addComponent(
-																						id_txt,
-																						GroupLayout.PREFERRED_SIZE,
-																						30,
-																						GroupLayout.PREFERRED_SIZE)
-																				.addGap(76)
-																				.addComponent(
-																						prev_btn,
-																						GroupLayout.PREFERRED_SIZE,
-																						42,
-																						GroupLayout.PREFERRED_SIZE)
-																				.addComponent(
-																						next_btn,
-																						GroupLayout.PREFERRED_SIZE,
-																						39,
-																						GroupLayout.PREFERRED_SIZE)
-																				.addGap(0,
-																						13,
-																						Short.MAX_VALUE))))
-								.addGroup(
-										GroupLayout.Alignment.LEADING,
-										layout.createSequentialGroup()
-												.addComponent(
-														header_lbl,
-														GroupLayout.PREFERRED_SIZE,
-														GroupLayout.PREFERRED_SIZE,
-														GroupLayout.PREFERRED_SIZE)
-												.addGap(0, 52, Short.MAX_VALUE)))
-				.addContainerGap(25, 25));
+		layout.setVerticalGroup(layout.createSequentialGroup()
+			.addContainerGap()
+			.addComponent(header_lbl, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+			.addGroup(layout.createParallelGroup()
+			    .addGroup(GroupLayout.Alignment.LEADING, layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+			        .addComponent(prev_btn, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+			        .addComponent(next_btn, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+			    .addGroup(layout.createSequentialGroup()
+			        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+			        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+			            .addComponent(getSearch_txt(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+			            .addComponent(getSearch_lbl(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE))))
+			.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+			.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+			    .addComponent(id_txt, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+			    .addComponent(id_lbl, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+			.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+			.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+			    .addComponent(vorname_txt, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+			    .addComponent(vorname_lbl, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+			.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+			.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+			    .addComponent(name_txt, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+			    .addComponent(name_lbl, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+			.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+			.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+			    .addComponent(email_txt, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+			    .addComponent(email_lbl, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+			.addContainerGap());
+		layout.setHorizontalGroup(layout.createSequentialGroup()
+			.addContainerGap()
+			.addGroup(layout.createParallelGroup()
+			    .addGroup(layout.createSequentialGroup()
+			        .addGroup(layout.createParallelGroup()
+			            .addComponent(vorname_lbl, GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+			            .addGroup(GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+			                .addComponent(getSearch_lbl(), 0, 40, Short.MAX_VALUE)
+			                .addGap(6))
+			            .addGroup(layout.createSequentialGroup()
+			                .addGap(7)
+			                .addGroup(layout.createParallelGroup()
+			                    .addComponent(email_lbl, GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+			                    .addComponent(name_lbl, GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+			                    .addGroup(GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+			                        .addPreferredGap(email_lbl, id_lbl, LayoutStyle.ComponentPlacement.INDENT)
+			                        .addComponent(id_lbl, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+			                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)))
+			                .addGap(8)))
+			        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+			        .addGroup(layout.createParallelGroup()
+			            .addGroup(layout.createSequentialGroup()
+			                .addComponent(email_txt, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
+			                .addGap(0, 0, Short.MAX_VALUE))
+			            .addGroup(layout.createSequentialGroup()
+			                .addComponent(name_txt, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
+			                .addGap(0, 0, Short.MAX_VALUE))
+			            .addGroup(layout.createSequentialGroup()
+			                .addComponent(vorname_txt, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
+			                .addGap(0, 0, Short.MAX_VALUE))
+			            .addGroup(GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+			                .addGroup(layout.createParallelGroup()
+			                    .addComponent(getSearch_txt(), GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE)
+			                    .addGroup(GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+			                        .addComponent(id_txt, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
+			                        .addGap(29)))
+			                .addGap(47)
+			                .addComponent(prev_btn, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)
+			                .addComponent(next_btn, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE)
+			                .addGap(0, 13, Short.MAX_VALUE))))
+			    .addGroup(GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+			        .addComponent(header_lbl, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+			        .addGap(0, 47, Short.MAX_VALUE)))
+			.addContainerGap(38, 38));
 		this.addWindowListener(new WindowAdapter() {
 			public void windowOpened(WindowEvent evt) {
 				try {
@@ -584,6 +475,31 @@ public class AppInterface extends javax.swing.JFrame {
 		
 		
 	}
+	
+	private JTextField getSearch_txt() {
+		if(search_txt == null) {
+			search_txt = new JTextField();
+			search_txt.addKeyListener(new KeyAdapter() {
+				public void keyPressed(KeyEvent evt) {
+					search_txtKeyPressed(evt);
+				}
+			});
+		}
+		return search_txt;
+	}
+	
+	private JLabel getSearch_lbl() {
+		if(search_lbl == null) {
+			search_lbl = new JLabel();
+			search_lbl.setText("Suchen:");
+		}
+		return search_lbl;
+	}
+	
+	private void search_txtKeyPressed(KeyEvent evt) {
+		System.out.println("search_txt.keyPressed, event="+evt);
+		dao.fir
+	}
 
 	// Variables declaration - do not modify//GEN-BEGIN:variables
 	private javax.swing.JLabel email_lbl;
@@ -594,6 +510,8 @@ public class AppInterface extends javax.swing.JFrame {
 	private javax.swing.JTextField id_txt;
 	private javax.swing.JMenu jMenu2;
 	private javax.swing.JMenuBar menuBar;
+	private JLabel search_lbl;
+	private JTextField search_txt;
 	private JMenuItem delete_entry;
 	private JMenuItem end_program;
 	private JMenuItem edit_new_entry;
