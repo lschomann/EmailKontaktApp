@@ -245,7 +245,6 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 		return objs[0];
     }
     
-    
     /**
      * Select all IEmailKontakt instances that match a given criterion.
      * All IEmailKontakt instances are checked for whether at least one of it's fields

@@ -457,22 +457,24 @@ public class AppInterface extends javax.swing.JFrame {
 		System.out.println("delete_entry actionPerformed");
 		IEmailKontakt k = getCurrent();
 		try {
+			// If a following entry exists
 			update(dao.next(k));
 		}
 		catch(NoNextEmailKontaktFoundException e) {
 			try {
+				// If a previous entry exists
 				update(dao.previous(k));
 			}
 			catch(NoPreviousEmailKontaktFoundException f) {
+				// Create a new empty entry
 				update(this.getContact());
 				
 			}
 		}
 		finally{
+			// Delete the selected entry from database
 			dao.delete(k);
 		}
-		
-		
 		
 	}
 	
