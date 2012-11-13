@@ -4,7 +4,15 @@
  */
 package DataLayer.DataAccessObjects.Webservice;
 
+import java.util.LinkedList;
+import java.util.List;
+import javax.ws.rs.core.MediaType;
+
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.WebResource;
+
 import BusinessObjects.IEmailKontakt;
+import DataLayer.BusinessObjects.EmailKontakt;
 import DataLayer.DataAccessObjects.IEmailKontaktDAO;
 
 /**
@@ -13,49 +21,94 @@ import DataLayer.DataAccessObjects.IEmailKontaktDAO;
  */
 public class EmailKontaktDaoWebservice implements IEmailKontaktDAO{
 
+	private WebResource resource;
+	
+	
+	public void init(){
+		// just for testing: set up local server
+		if (!ServerHelper.serverResponds(ServerHelper.SERVICE_URL + "/objects/alive")){
+			ServerHelper.StartLocalServer();
+		}
+	}
+	
+	protected void finalize() throws Throwable{
+		ServerHelper.StopLocalServer();
+		super.finalize();
+	}
+	
+	private WebResource getResource(){
+		if (resource == null){
+			resource = Client.create().resource(ServerHelper.SERVICE_URL);
+		}
+		return resource;
+	}
+	
     @Override
     public IEmailKontakt create() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    	return new EmailKontakt(0, null, null, null); 
     }
 
     @Override
     public IEmailKontakt[] select() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    	throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public IEmailKontakt select(int id) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    	return getResource().path("objects").path("id").path(String.valueOf(id))
+    							.accept(MediaType.APPLICATION_XML)
+    							.get(EmailKontaktBean.class).getContact();
+    }
+    
+    @Override
+    public IEmailKontakt[] select(String criterion){
+    	throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public IEmailKontakt first() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    	return getResource().path("objects").path("first")
+		.accept(MediaType.APPLICATION_XML)
+		.get(EmailKontaktBean.class).getContact();
     }
 
     @Override
     public IEmailKontakt last() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    	return getResource().path("objects").path("last")
+		.accept(MediaType.APPLICATION_XML)
+		.get(EmailKontaktBean.class).getContact();
     }
 
     @Override
     public void delete(IEmailKontakt emailKontakt) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    	EmailKontaktBean b = new EmailKontaktBean(emailKontakt);
+    	getResource().path("objects").path("delete")
+        	 		 .type(MediaType.APPLICATION_XML)
+        	 		 .post(EmailKontaktBean.class, b);
     }
 
     @Override
     public IEmailKontakt next(IEmailKontakt emailKontakt) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    	EmailKontaktBean b = new EmailKontaktBean(emailKontakt);
+    	return getResource().path("objects").path("next")
+        			 		 .type(MediaType.APPLICATION_XML)
+        			 		 .post(EmailKontaktBean.class, b).getContact();
     }
 
     @Override
     public IEmailKontakt previous(IEmailKontakt emailKontakt) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    	EmailKontaktBean b = new EmailKontaktBean(emailKontakt);
+    	return getResource().path("objects").path("previous")
+        			 		 .type(MediaType.APPLICATION_XML)
+        			 		 .post(EmailKontaktBean.class, b).getContact();
     }
 
     @Override
     public void save(IEmailKontakt emailKontakt) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    	EmailKontaktBean b = new EmailKontaktBean(emailKontakt);
+    	getResource().path("objects").path("save")
+        	 		 .type(MediaType.APPLICATION_XML)
+        	 		 .put(EmailKontaktBean.class, b);
     }
     
 }

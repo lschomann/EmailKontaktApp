@@ -4,6 +4,8 @@
  */
 package DataLayer.DataAccessObjects.Sqlite;
 
+import java.util.List;
+
 import BusinessObjects.IEmailKontakt;
 import DataLayer.BusinessObjects.EmailKontakt;
 import DataLayer.DataAccessObjects.IEmailKontaktDAO;
@@ -69,6 +71,10 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 		}
 	}
 	
+	protected void finalize() throws Throwable{
+		super.finalize();
+	}
+	
 	public Boolean dropTable(String name) throws SQLException{
 		Connection conn = null;
 		PreparedStatement stmt = null;
@@ -102,8 +108,6 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 
 		boolean exists = stmt.getResultSet().next();
 		conn.close();
-		
-		System.out.println("testSelect_0args: conn status=" + Boolean.toString(conn.isClosed()));
 		
         return exists;
     }
@@ -239,6 +243,41 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
             throw new NoEmailKontaktFoundException();
         }
 		return objs[0];
+    }
+    
+    
+    /**
+     * Select all IEmailKontakt instances that match a given criterion.
+     * All IEmailKontakt instances are checked for whether at least one of it's fields
+     * _contains_ *criterion*. If it does, that IEmailKontakt instance will belong to 
+     * the result set.  
+     * 
+     * @param criterion The string to search all IEmailKontakt entries for.
+     * @return Array of matching IEmailKontakt instances.
+     */
+    @Override
+    public IEmailKontakt[] select(String criterion){
+		IEmailKontakt[] objs = select();
+		List<IEmailKontakt> remaining = new LinkedList<IEmailKontakt>();
+		
+		for(IEmailKontakt o: objs){
+			if (o.getNachname().contains(criterion) || o.getVorname().contains(criterion) || o.getEmail().contains(criterion)){
+				remaining.add(o);
+				continue;
+			}
+			
+			try{
+				if ((new Integer(o.getID())).equals((Integer.parseInt(criterion)))){
+					remaining.add(o);
+					continue;
+				}
+			} 
+			catch (NumberFormatException e){
+				// pass
+			}
+		}
+		
+		return remaining.toArray(new IEmailKontakt[remaining.size()]);
     }
 	
     @Override

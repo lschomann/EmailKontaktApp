@@ -4,7 +4,10 @@
  */
 package DataLayer.DataAccessObjects.Webservice;
 
+import java.sql.SQLException;
+
 import DataLayer.DataAccessObjects.IEmailKontaktDAO;
+import DataLayer.DataAccessObjects.Sqlite.EmailKontaktDaoSqlite;
 import DataLayer.IDataLayer;
 
 /**
@@ -15,7 +18,9 @@ public class DataLayerWebservice implements IDataLayer{
 
     @Override
     public IEmailKontaktDAO getEmailKontaktDao() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    	EmailKontaktDaoWebservice dao = new EmailKontaktDaoWebservice();
+        dao.init();
+        return dao;
     }
     
 }

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package DataLayer.DataAccessObjects.Sqlite;
+package DataLayer.DataAccessObjects;
 
 import DataLayer.DataAccessObjects.IEmailKontaktDAO;
 import org.junit.After;
