@@ -8,7 +8,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
@@ -64,21 +63,20 @@ public class Webservice {
 	@GET
 	@Produces(MediaType.APPLICATION_XML)
 	@Path("filter/{criterion}")
-	public List<EmailKontaktBean> filter(@PathParam("criterion") String criterion){
+	public EmailKontaktBean[] filter(@PathParam("criterion") String criterion){
+		List<EmailKontaktBean> beans = new LinkedList<EmailKontaktBean>();
 		try{
 			EmailKontaktBean b;
-			List<EmailKontaktBean> beans = new LinkedList<EmailKontaktBean>();
 			for(IEmailKontakt c: (getDao()).select(criterion)){
 				b = new EmailKontaktBean(); 
 				b.setContact((EmailKontakt)c);
 				beans.add(b);
 			}
-			return beans;
 		}
 		catch(NumberFormatException e){
-			// TODO: set response HTTP 204 - No Content
-			return null;
+			// pass. will result in http 204 No Content response
 		}
+		return beans.toArray(new EmailKontaktBean[beans.size()]);
 	}
 	
 	@GET
@@ -96,7 +94,7 @@ public class Webservice {
 			}
 		}
 		catch(NumberFormatException e){
-			// TODO: set response code to HTTP 204 - No Content
+			// pass. will result in http 204 No Content response
 		}
 		return beans;
 	}

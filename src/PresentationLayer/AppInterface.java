@@ -491,7 +491,17 @@ public class AppInterface extends javax.swing.JFrame {
 	
 	private void search_txtKeyPressed(KeyEvent evt) {
 		System.out.println("search_txt.keyPressed, event="+evt);
-		
+		if (this.search_txt.getText() != null && !this.search_txt.getText().equals("")){
+			try{
+				IEmailKontakt[] objs = dao.select(this.search_txt.getText());
+				if (objs.length > 0){
+					this.update(objs[0]);
+				}
+			}
+			catch(NoEmailKontaktFoundException e){
+				// pass
+			}
+		}
 	}
 
 	// Variables declaration - do not modify//GEN-BEGIN:variables
