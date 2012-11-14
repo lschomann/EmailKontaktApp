@@ -473,8 +473,8 @@ public class AppInterface extends javax.swing.JFrame {
 		if(search_txt == null) {
 			search_txt = new JTextField();
 			search_txt.addKeyListener(new KeyAdapter() {
-				public void keyPressed(KeyEvent evt) {
-					search_txtKeyPressed(evt);
+				public void keyTyped(KeyEvent evt) {
+					search_txtKeyTyped(evt);
 				}
 			});
 		}
@@ -489,18 +489,19 @@ public class AppInterface extends javax.swing.JFrame {
 		return search_lbl;
 	}
 	
-	private void search_txtKeyPressed(KeyEvent evt) {
+	private void search_txtKeyTyped(KeyEvent evt) {
 		System.out.println("search_txt.keyPressed, event="+evt);
-		if (this.search_txt.getText() != null && !this.search_txt.getText().equals("")){
-			try{
-				IEmailKontakt[] objs = dao.select(this.search_txt.getText());
-				if (objs.length > 0){
-					this.update(objs[0]);
-				}
+		
+		String s = (this.search_txt.getText() == null ? "" : this.search_txt.getText()) + evt.getKeyChar();
+	
+		try{
+			IEmailKontakt[] objs = dao.select(s);
+			if (objs.length > 0){
+				this.update(objs[0]);
 			}
-			catch(NoEmailKontaktFoundException e){
-				// pass
-			}
+		}
+		catch(NoEmailKontaktFoundException e){
+			// pass
 		}
 	}
 

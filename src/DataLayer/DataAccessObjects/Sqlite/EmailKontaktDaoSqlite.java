@@ -261,6 +261,14 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 		IEmailKontakt[] objs = select();
 		List<IEmailKontakt> remaining = new LinkedList<IEmailKontakt>();
 		
+		int id = -1;
+		try{
+			id = Integer.parseInt(criterion);
+		}
+		catch(NumberFormatException e){
+			// pass
+		}
+		
 		for(IEmailKontakt o: objs){
 			if (o.getNachname().contains(criterion) || o.getVorname().contains(criterion) || o.getEmail().contains(criterion)){
 				remaining.add(o);
@@ -268,7 +276,7 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 			}
 			
 			try{
-				if ((new Integer(o.getID())).equals((Integer.parseInt(criterion)))){
+				if ((new Integer(o.getID())).equals(id)){
 					remaining.add(o);
 					continue;
 				}
