@@ -114,6 +114,12 @@ public class AppInterface extends javax.swing.JFrame {
 			}
 		});
 		
+		this.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent evt){
+				onExit();
+			}
+		});
+		
 		vorname_lbl = new javax.swing.JLabel();
 		name_lbl = new javax.swing.JLabel();
 		email_lbl = new javax.swing.JLabel();
@@ -124,7 +130,8 @@ public class AppInterface extends javax.swing.JFrame {
 		file_menu = new javax.swing.JMenu();
 		jMenu2 = new javax.swing.JMenu();
 
-		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+		
 		setTitle("Email Kontakt Manager v0.1");
 
 		vorname_lbl.setText("Vorname:");
@@ -278,6 +285,9 @@ public class AppInterface extends javax.swing.JFrame {
 			        .addGap(0, 47, Short.MAX_VALUE)))
 			.addContainerGap(38, 38));
 		this.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent evt) {
+				thisWindowClosing(evt);
+			}
 			public void windowOpened(WindowEvent evt) {
 				try {
 					thisWindowOpened(evt);
@@ -398,17 +408,16 @@ public class AppInterface extends javax.swing.JFrame {
 			throws NoEmailKontaktFoundException {
 		System.out.println("end_program actionPerformed");
 
-		// Show dialog if user want to save state
-		int n = JOptionPane.showConfirmDialog(this, "Save your changes?",
-				"Really quit?", JOptionPane.YES_NO_OPTION);
-		if (n == JOptionPane.YES_OPTION) {
+		onExit();
+	}
 
+	private void onExit() {
+		if (isDirty){
 			IEmailKontakt c = getContact();
-
 			dao.save(c);
-
 		}
-
+		this.dispose();
+		System.exit(0);
 	}
 
 	private void edit_new_entryActionPerformed(ActionEvent evt) {
@@ -589,6 +598,11 @@ public class AppInterface extends javax.swing.JFrame {
 	
 	private void showStatus(String msg){
 		System.out.println(msg);
+	}
+	
+	private void thisWindowClosing(WindowEvent evt) {
+		System.out.println("this.windowClosing, event="+evt);
+		//TODO add your code for this.windowClosing
 	}
 
 	// Variables declaration - do not modify//GEN-BEGIN:variables
