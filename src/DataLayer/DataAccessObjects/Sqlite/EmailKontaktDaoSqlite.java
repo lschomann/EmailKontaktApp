@@ -269,7 +269,7 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 			// pass
 		}
 		
-		
+		String crit = criterion.toLowerCase();
 		
 		for(IEmailKontakt o: objs){
 			if ((new Integer(o.getID())).equals(id)){
@@ -277,7 +277,9 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 				continue;
 			}
 			
-			if (o.getNachname().contains(criterion) || o.getVorname().contains(criterion) || o.getEmail().contains(criterion)){
+			if (o.getNachname().toLowerCase().contains(crit) 
+					|| o.getVorname().toLowerCase().contains(crit) 
+					|| o.getEmail().toLowerCase().contains(crit)){
 				remaining.add(o);
 			}
 		}
