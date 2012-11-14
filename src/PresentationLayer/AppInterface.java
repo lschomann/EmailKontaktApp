@@ -6,11 +6,13 @@ package PresentationLayer;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.LayoutStyle;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.Timer;
 
 import DataLayer.DataLayerManager;
 import java.awt.event.MouseAdapter;
@@ -371,6 +373,7 @@ public class AppInterface extends javax.swing.JFrame {
 	}
 
 	private IEmailKontakt current_kontakt;
+	private Timer searchTimer;
 
 	// Add IEmailKontakt Objekt to txt Fields
 	private void update(IEmailKontakt t) {
@@ -491,18 +494,35 @@ public class AppInterface extends javax.swing.JFrame {
 	
 	private void search_txtKeyTyped(KeyEvent evt) {
 		System.out.println("search_txt.keyPressed, event="+evt);
+		this.startSearchTimer();
+	}
+
+	private void startSearchTimer() {
+		if (searchTimer == null){
+			final AppInterface self = this;
+			
+			int delay = 300; //milliseconds
+			ActionListener taskPerformer = new ActionListener() {
+			    public void actionPerformed(ActionEvent evt) {
+			    	try{
+			    		String searchText = self.search_txt.getText() == null ? "" : self.search_txt.getText();
+						IEmailKontakt[] objs = dao.select(searchText);
+						if (objs.length > 0){
+							self.update(objs[0]);
+						}
+					}
+					catch(NoEmailKontaktFoundException e){
+						// pass
+					}
+			    	finally{
+			    		self.searchTimer.stop();
+			    	}
+			    }
+			};
+			this.searchTimer = new Timer(delay, taskPerformer);
+		}
 		
-		String s = (this.search_txt.getText() == null ? "" : this.search_txt.getText()) + evt.getKeyChar();
-	
-		try{
-			IEmailKontakt[] objs = dao.select(s);
-			if (objs.length > 0){
-				this.update(objs[0]);
-			}
-		}
-		catch(NoEmailKontaktFoundException e){
-			// pass
-		}
+		this.searchTimer.restart();
 	}
 
 	// Variables declaration - do not modify//GEN-BEGIN:variables
