@@ -2,23 +2,23 @@ package DataLayer.DataAccessObjects.Webservice;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import BusinessObjects.IEmailKontakt;
+import DataLayer.BusinessObjects.EmailKontakt;
 
 
 @XmlRootElement
 public class EmailKontaktBean {
-	private IEmailKontakt c;
+	private EmailKontakt c;
 	
 	
 	public EmailKontaktBean(){
 
 	}
 	
-	public IEmailKontakt getContact(){
+	public EmailKontakt getContact(){
 		return c;
 	}
 	
-	public void setContact(IEmailKontakt c){
+	public void setContact(EmailKontakt c){
 		this.c = c;
 	}
 }

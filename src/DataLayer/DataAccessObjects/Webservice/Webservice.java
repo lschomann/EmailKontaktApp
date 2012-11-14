@@ -3,6 +3,7 @@ package DataLayer.DataAccessObjects.Webservice;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.Path;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -10,10 +11,15 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import com.sun.jersey.api.client.ClientResponse.Status;
 
 
 import BusinessObjects.IEmailKontakt;
+import DataLayer.BusinessObjects.EmailKontakt;
 import DataLayer.DataAccessObjects.Sqlite.EmailKontaktDaoSqlite;
 import Exceptions.NoEmailKontaktFoundException;
 import Exceptions.NoNextEmailKontaktFoundException;
@@ -39,16 +45,20 @@ public class Webservice {
 			int id_ = Integer.parseInt(id);
 			
 			EmailKontaktBean b = new EmailKontaktBean(); 
-			b.setContact(getDao().select(id_));
+			b.setContact((EmailKontakt)getDao().select(id_));
 			return b;
 		}
 		catch(NoEmailKontaktFoundException e){
 			return null;
 		}
 		catch(NumberFormatException e){
-			return null;
+			throw new WebApplicationException(
+			        Response
+			          .status(Status.BAD_REQUEST)
+			          .entity(e.getMessage())
+			          .build()
+			      );
 		}
-		
 	}
 	
 	@GET
@@ -60,7 +70,7 @@ public class Webservice {
 			List<EmailKontaktBean> beans = new LinkedList<EmailKontaktBean>();
 			for(IEmailKontakt c: (getDao()).select(criterion)){
 				b = new EmailKontaktBean(); 
-				b.setContact(c);
+				b.setContact((EmailKontakt)c);
 				beans.add(b);
 			}
 			return beans;
@@ -81,7 +91,7 @@ public class Webservice {
 			beans = new LinkedList<EmailKontaktBean>();
 			for(IEmailKontakt c: (getDao()).select()){
 				b = new EmailKontaktBean(); 
-				b.setContact(c);
+				b.setContact((EmailKontakt)c);
 				beans.add(b);
 			}
 		}
@@ -99,12 +109,12 @@ public class Webservice {
 		try{
 			c = (getDao().first());
 			EmailKontaktBean b = new EmailKontaktBean(); 
-			b.setContact(c);
+			b.setContact((EmailKontakt)c);
 			return b;
 		}
 		catch(NoEmailKontaktFoundException e)
 		{
-			// TODO: set response code to HTTP 204 - No Content
+			// pass. will result in http 204 No Content response
 		}
 		return null;
 	}
@@ -117,62 +127,68 @@ public class Webservice {
 		try{
 			c = (getDao().last());
 			EmailKontaktBean b = new EmailKontaktBean(); 
-			b.setContact(c);
+			b.setContact((EmailKontakt)c);
 			return b;
 		}
 		catch(NoEmailKontaktFoundException e)
 		{
-			// TODO: set response code to HTTP 204 - No Content
+			// pass. will result in http 204 No Content response
 		}
 		return null;
 	}
 
-	@GET
+	@POST
+	@Consumes(MediaType.APPLICATION_XML)
 	@Produces(MediaType.APPLICATION_XML)
-	@Path("next/{bean}")
-	public EmailKontaktBean next(@PathParam("bean") EmailKontaktBean bean){
+	@Path("next")
+	public EmailKontaktBean next(EmailKontaktBean bean){
 		IEmailKontakt c = null;
 		try{
 			c = (getDao().next(bean.getContact()));
 			EmailKontaktBean b = new EmailKontaktBean(); 
-			b.setContact(c);
+			b.setContact((EmailKontakt)c);
 			return b;
 		}
 		catch(NoNextEmailKontaktFoundException e)
 		{
-			// TODO: set response code to HTTP 204 - No Content
+			// pass. will result in http 204 No Content response
 		}
 		return null;
 	}
 	
-	@GET
+	@POST
+	@Consumes(MediaType.APPLICATION_XML)
 	@Produces(MediaType.APPLICATION_XML)
-	@Path("previous/{bean}")
-	public EmailKontaktBean previous(@PathParam("bean") EmailKontaktBean bean){
+	@Path("previous")
+	public EmailKontaktBean previous(EmailKontaktBean bean){
 		IEmailKontakt c = null;
 		try{
 			c = getDao().previous(bean.getContact());
 			EmailKontaktBean b = new EmailKontaktBean(); 
-			b.setContact(c);
+			b.setContact((EmailKontakt)c);
 			return b;
 		}
 		catch(NoPreviousEmailKontaktFoundException e)
 		{
-			// TODO: set response code to HTTP 204 - No Content
+			// pass. will result in http 204 No Content response
 		}
 		return null;
 	}
 	
-	@DELETE
-	@Path("delete/{bean}")
-	public void delete(@PathParam("bean") EmailKontaktBean bean){
+	@PUT
+	@Path("delete")
+	@Consumes(MediaType.APPLICATION_XML)
+	public void delete(EmailKontaktBean bean){
 		getDao().delete(bean.getContact());
 	}
 	
 	@POST
-	@Path("save/{bean}")
-	public void save(@PathParam("bean") EmailKontaktBean bean){
+	@Path("save")
+	@Consumes(MediaType.APPLICATION_XML)
+	@Produces(MediaType.APPLICATION_XML)
+	public EmailKontaktBean save(EmailKontaktBean bean){
 		getDao().save(bean.getContact());
+		return bean;
 	}
 	
 	private EmailKontaktDaoSqlite dao;

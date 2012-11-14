@@ -4,7 +4,9 @@
  */
 package DataLayer.BusinessObjects;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import DataLayer.DataAccessObjects.Webservice.EmailKontaktAdapter;
 
 
 /**
@@ -12,7 +14,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Lukas Schomann
  * @author Malte Engelhardt
  */
-@XmlRootElement
+@XmlJavaTypeAdapter(EmailKontaktAdapter.class)
 public class EmailKontakt implements BusinessObjects.IEmailKontakt{
     private int id;
     private String vorname, nachname, email;

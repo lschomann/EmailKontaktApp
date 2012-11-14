@@ -125,8 +125,7 @@ public class AppInterface extends javax.swing.JFrame {
 					try {
 						prev_btnMouseClicked(evt);
 					} catch (NoPreviousEmailKontaktFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						System.out.println(e.getClass().toString() + " " + e.getMessage());
 					}
 				}
 			});
@@ -139,8 +138,7 @@ public class AppInterface extends javax.swing.JFrame {
 					try {
 						next_btnMouseClicked(evt);
 					} catch (NoNextEmailKontaktFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						System.out.println(e.getClass().toString() + " " + e.getMessage());
 					}
 				}
 			});
@@ -158,8 +156,7 @@ public class AppInterface extends javax.swing.JFrame {
 					try {
 						end_programActionPerformed(evt);
 					} catch (NoEmailKontaktFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						System.out.println(e.getClass().toString() + " " + e.getMessage());
 					}
 				}
 			});
@@ -263,8 +260,7 @@ public class AppInterface extends javax.swing.JFrame {
 				try {
 					thisWindowOpened(evt);
 				} catch (NoEmailKontaktFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println(e.getClass().toString() + " " + e.getMessage());
 				}
 			}
 		});
@@ -387,23 +383,22 @@ public class AppInterface extends javax.swing.JFrame {
 
 	// Create IEmailKontakt Object
 	private IEmailKontakt getContact() {
-		int id = Integer.parseInt(this.id_txt.getText());
+		int id = Integer.parseInt((this.id_txt.getText() == null ? "0" : this.id_txt.getText()));
 		IEmailKontakt c = null;
 		try {
 			c = dao.select(id);
 		} catch (NoEmailKontaktFoundException e) {
 			c = dao.create();
 		}
-		c.setEmail(this.email_txt.getText());
-		c.setVorname(this.vorname_txt.getText());
-		c.setNachname(this.name_txt.getText());
+		c.setEmail((this.email_txt.getText()));
+		c.setVorname((this.vorname_txt.getText()));
+		c.setNachname((this.name_txt.getText()));
 
 		return c;
 	}
 
 	// Return the current set contact
 	private IEmailKontakt getCurrent() {
-
 		return this.current_kontakt;
 	}
 
@@ -442,8 +437,7 @@ public class AppInterface extends javax.swing.JFrame {
 					try {
 						delete_entryActionPerformed(evt);
 					} catch (NoNextEmailKontaktFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						System.out.println(e.getClass().toString() + " " + e.getMessage());
 					}
 				}
 			});
@@ -466,7 +460,6 @@ public class AppInterface extends javax.swing.JFrame {
 			catch(NoPreviousEmailKontaktFoundException f) {
 				// Create a new empty entry
 				update(this.getContact());
-				
 			}
 		}
 		finally{
