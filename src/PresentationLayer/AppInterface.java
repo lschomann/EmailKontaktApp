@@ -61,6 +61,10 @@ public class AppInterface extends javax.swing.JFrame {
 	 */
 
 	private static IEmailKontaktDAO dao;
+	private IEmailKontakt current_kontakt;
+	private Timer searchTimer;
+	private boolean isDirty;
+	private Timer dirtyTimer;
 
 	public AppInterface() {
 		initComponents();
@@ -82,10 +86,20 @@ public class AppInterface extends javax.swing.JFrame {
 				vorname_txtFocusLost(evt);
 			}
 		});
+		vorname_txt.addKeyListener(new KeyAdapter() {
+			public void keyTyped(KeyEvent evt){
+				vorname_txtKeyTyped(evt);
+			}
+		});
 		name_txt = new javax.swing.JTextField();
 		name_txt.addFocusListener(new FocusAdapter() {
 			public void focusLost(FocusEvent evt) {
 				name_txtFocusLost(evt);
+			}
+		});
+		name_txt.addKeyListener(new KeyAdapter() {
+			public void keyTyped(KeyEvent evt){
+				name_txtKeyTyped(evt);
 			}
 		});
 		email_txt = new javax.swing.JTextField();
@@ -94,6 +108,12 @@ public class AppInterface extends javax.swing.JFrame {
 				email_txtFocusLost(evt);
 			}
 		});
+		email_txt.addKeyListener(new KeyAdapter() {
+			public void keyTyped(KeyEvent evt){
+				email_txtKeyTyped(evt);
+			}
+		});
+		
 		vorname_lbl = new javax.swing.JLabel();
 		name_lbl = new javax.swing.JLabel();
 		email_lbl = new javax.swing.JLabel();
@@ -271,6 +291,40 @@ public class AppInterface extends javax.swing.JFrame {
 		this.setSize(316, 258);
 	}// </editor-fold>//GEN-END:initComponents
 
+	protected void email_txtKeyTyped(KeyEvent evt) {
+		this.startDirtyTimer();
+	}
+
+	protected void name_txtKeyTyped(KeyEvent evt) {
+		this.startDirtyTimer();
+		
+	}
+
+	protected void vorname_txtKeyTyped(KeyEvent evt) {
+		this.startDirtyTimer();
+	}
+
+	private void startDirtyTimer() {
+		if (this.dirtyTimer == null){
+			final AppInterface self = this;
+			ActionListener p = new ActionListener() {
+			    public void actionPerformed(ActionEvent evt) {
+			    	self.isDirty = (
+		    			(self.vorname_txt.getText() != null && !self.vorname_txt.getText().equals(self.getCurrent().getVorname()) 
+		    				|| self.getCurrent().getVorname() == self.vorname_txt.getText())
+		    			|| (self.name_txt.getText() != null && !self.name_txt.getText().equals(self.getCurrent().getNachname()) 
+			    				|| self.getCurrent().getNachname() == self.name_txt.getText())
+			    		|| (self.email_txt.getText() != null && !self.email_txt.getText().equals(self.getCurrent().getEmail()) 
+			    				|| self.getCurrent().getEmail() == self.email_txt.getText())
+			    	);
+			    	self.dirtyTimer.stop();
+			    }
+			};
+			this.dirtyTimer = new Timer(50, p);
+		}
+		this.dirtyTimer.restart();
+	}
+
 	/**
 	 * @param args
 	 *            the command line arguments
@@ -372,9 +426,6 @@ public class AppInterface extends javax.swing.JFrame {
 		return k;
 	}
 
-	private IEmailKontakt current_kontakt;
-	private Timer searchTimer;
-
 	// Add IEmailKontakt Objekt to txt Fields
 	private void update(IEmailKontakt t) {
 		this.id_txt.setText(Integer.toString(t.getID()));
@@ -382,6 +433,7 @@ public class AppInterface extends javax.swing.JFrame {
 		this.name_txt.setText(t.getNachname());
 		this.email_txt.setText(t.getEmail());
 		this.setCurrent(t);
+		this.isDirty = false;
 	}
 
 	// Create IEmailKontakt Object
@@ -414,21 +466,31 @@ public class AppInterface extends javax.swing.JFrame {
 		System.out.println("vorname_txt focusLost");
 
 		IEmailKontakt k = getContact();
-		dao.save(k);
+		if (isDirty){
+			dao.save(k);
+			isDirty = false;
+		}
 	}
 
 	private void name_txtFocusLost(FocusEvent evt) {
 		System.out.println("name_txt focusLost");
 
 		IEmailKontakt k = getContact();
-		dao.save(k);
+		if (isDirty){
+			dao.save(k);
+			isDirty = false;
+		}
 	}
 
 	private void email_txtFocusLost(FocusEvent evt) {
 		System.out.println("email_txt focusLost");
 
 		IEmailKontakt k = getContact();
-		dao.save(k);
+		
+		if (isDirty){
+			dao.save(k);
+			isDirty = false;
+		}
 	}
 
 	private JMenuItem getDelete_entry() {
