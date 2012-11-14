@@ -127,7 +127,7 @@ public class AppInterface extends javax.swing.JFrame {
 					try {
 						prev_btnMouseClicked(evt);
 					} catch (NoPreviousEmailKontaktFoundException e) {
-						System.out.println(e.getClass().toString() + " " + e.getMessage());
+						showStatus(String.format("%s%s", e.getClass(), (e.getMessage() == null ? "" : " : " +e.getMessage())));
 					}
 				}
 			});
@@ -140,7 +140,7 @@ public class AppInterface extends javax.swing.JFrame {
 					try {
 						next_btnMouseClicked(evt);
 					} catch (NoNextEmailKontaktFoundException e) {
-						System.out.println(e.getClass().toString() + " " + e.getMessage());
+						showStatus(String.format("%s%s", e.getClass(), (e.getMessage() == null ? "" : " : " +e.getMessage())));
 					}
 				}
 			});
@@ -158,7 +158,7 @@ public class AppInterface extends javax.swing.JFrame {
 					try {
 						end_programActionPerformed(evt);
 					} catch (NoEmailKontaktFoundException e) {
-						System.out.println(e.getClass().toString() + " " + e.getMessage());
+						showStatus(String.format("%s%s", e.getClass(), (e.getMessage() == null ? "" : " : " +e.getMessage())));
 					}
 				}
 			});
@@ -262,7 +262,7 @@ public class AppInterface extends javax.swing.JFrame {
 				try {
 					thisWindowOpened(evt);
 				} catch (NoEmailKontaktFoundException e) {
-					System.out.println(e.getClass().toString() + " " + e.getMessage());
+					showStatus(String.format("%s%s", e.getClass(), (e.getMessage() == null ? "" : " : " +e.getMessage())));
 				}
 			}
 		});
@@ -440,7 +440,7 @@ public class AppInterface extends javax.swing.JFrame {
 					try {
 						delete_entryActionPerformed(evt);
 					} catch (NoNextEmailKontaktFoundException e) {
-						System.out.println(e.getClass().toString() + " " + e.getMessage());
+						showStatus(String.format("%s%s", e.getClass(), (e.getMessage() == null ? "" : " : " +e.getMessage())));
 					}
 				}
 			});
@@ -523,6 +523,10 @@ public class AppInterface extends javax.swing.JFrame {
 		}
 		
 		this.searchTimer.restart();
+	}
+	
+	private void showStatus(String msg){
+		System.out.println(msg);
 	}
 
 	// Variables declaration - do not modify//GEN-BEGIN:variables
