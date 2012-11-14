@@ -269,20 +269,16 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 			// pass
 		}
 		
+		
+		
 		for(IEmailKontakt o: objs){
-			if (o.getNachname().contains(criterion) || o.getVorname().contains(criterion) || o.getEmail().contains(criterion)){
+			if ((new Integer(o.getID())).equals(id)){
 				remaining.add(o);
 				continue;
 			}
 			
-			try{
-				if ((new Integer(o.getID())).equals(id)){
-					remaining.add(o);
-					continue;
-				}
-			} 
-			catch (NumberFormatException e){
-				// pass
+			if (o.getNachname().contains(criterion) || o.getVorname().contains(criterion) || o.getEmail().contains(criterion)){
+				remaining.add(o);
 			}
 		}
 		
