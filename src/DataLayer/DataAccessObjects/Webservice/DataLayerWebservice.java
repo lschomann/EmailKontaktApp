@@ -4,10 +4,7 @@
  */
 package DataLayer.DataAccessObjects.Webservice;
 
-import java.sql.SQLException;
-
 import DataLayer.DataAccessObjects.IEmailKontaktDAO;
-import DataLayer.DataAccessObjects.Sqlite.EmailKontaktDaoSqlite;
 import DataLayer.IDataLayer;
 
 /**

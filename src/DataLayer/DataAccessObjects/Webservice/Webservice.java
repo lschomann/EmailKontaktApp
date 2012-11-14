@@ -1,12 +1,8 @@
 package DataLayer.DataAccessObjects.Webservice;
 
-import java.io.IOException;
-import java.net.*;
 import java.util.LinkedList;
 import java.util.List;
-import java.io.*;
 
-import javax.swing.JOptionPane;
 import javax.ws.rs.Path;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -15,18 +11,13 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+
 
 import BusinessObjects.IEmailKontakt;
 import DataLayer.DataAccessObjects.Sqlite.EmailKontaktDaoSqlite;
 import Exceptions.NoEmailKontaktFoundException;
 import Exceptions.NoNextEmailKontaktFoundException;
 import Exceptions.NoPreviousEmailKontaktFoundException;
-
-import com.sun.net.httpserver.HttpServer;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.container.httpserver.HttpServerFactory;
 
 
 
