@@ -10,8 +10,8 @@ public class EmailKontaktBean {
 	private IEmailKontakt c;
 	
 	
-	public EmailKontaktBean(IEmailKontakt c){
-		this.c = c;
+	public EmailKontaktBean(){
+
 	}
 	
 	public IEmailKontakt getContact(){

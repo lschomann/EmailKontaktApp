@@ -193,6 +193,8 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 			try{
 				rs.close();
 				conn.close();
+				
+				System.out.println(System.getProperty("user.dir"));
 			}
 			catch(Exception ex){
 				ex.printStackTrace();

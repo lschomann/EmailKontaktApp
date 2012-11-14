@@ -4,11 +4,15 @@
  */
 package DataLayer.BusinessObjects;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+
 /**
  *
  * @author Lukas Schomann
  * @author Malte Engelhardt
  */
+@XmlRootElement
 public class EmailKontakt implements BusinessObjects.IEmailKontakt{
     private int id;
     private String vorname, nachname, email;

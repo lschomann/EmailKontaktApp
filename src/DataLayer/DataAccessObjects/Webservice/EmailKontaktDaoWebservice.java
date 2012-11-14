@@ -67,9 +67,10 @@ public class EmailKontaktDaoWebservice implements IEmailKontaktDAO{
 
     @Override
     public IEmailKontakt first() {
-    	return getResource().path("objects").path("first")
-		.accept(MediaType.APPLICATION_XML)
-		.get(EmailKontaktBean.class).getContact();
+    	IEmailKontakt c = getResource().path("objects").path("first")
+										.accept(MediaType.APPLICATION_XML)
+										.get(EmailKontaktBean.class).getContact();
+    	return c;
     }
 
     @Override
@@ -81,15 +82,17 @@ public class EmailKontaktDaoWebservice implements IEmailKontaktDAO{
 
     @Override
     public void delete(IEmailKontakt emailKontakt) {
-    	EmailKontaktBean b = new EmailKontaktBean(emailKontakt);
+    	EmailKontaktBean b = new EmailKontaktBean();
+    	b.setContact(emailKontakt);
     	getResource().path("objects").path("delete")
         	 		 .type(MediaType.APPLICATION_XML)
-        	 		 .post(EmailKontaktBean.class, b);
+        	 		 .delete(EmailKontaktBean.class, b);
     }
 
     @Override
     public IEmailKontakt next(IEmailKontakt emailKontakt) {
-    	EmailKontaktBean b = new EmailKontaktBean(emailKontakt);
+    	EmailKontaktBean b = new EmailKontaktBean();
+    	b.setContact(emailKontakt);
     	return getResource().path("objects").path("next")
         			 		 .type(MediaType.APPLICATION_XML)
         			 		 .post(EmailKontaktBean.class, b).getContact();
@@ -97,7 +100,8 @@ public class EmailKontaktDaoWebservice implements IEmailKontaktDAO{
 
     @Override
     public IEmailKontakt previous(IEmailKontakt emailKontakt) {
-    	EmailKontaktBean b = new EmailKontaktBean(emailKontakt);
+    	EmailKontaktBean b = new EmailKontaktBean();
+    	b.setContact(emailKontakt);
     	return getResource().path("objects").path("previous")
         			 		 .type(MediaType.APPLICATION_XML)
         			 		 .post(EmailKontaktBean.class, b).getContact();
@@ -105,10 +109,11 @@ public class EmailKontaktDaoWebservice implements IEmailKontaktDAO{
 
     @Override
     public void save(IEmailKontakt emailKontakt) {
-    	EmailKontaktBean b = new EmailKontaktBean(emailKontakt);
+    	EmailKontaktBean b = new EmailKontaktBean();
+    	b.setContact(emailKontakt);
     	getResource().path("objects").path("save")
         	 		 .type(MediaType.APPLICATION_XML)
-        	 		 .put(EmailKontaktBean.class, b);
+        	 		 .post(EmailKontaktBean.class, b);
     }
     
 }
