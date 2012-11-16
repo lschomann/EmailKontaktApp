@@ -32,6 +32,9 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 	private Boolean isInitialized = false;
 	
 	
+	/**
+	 * Initializes the Data Access Object.
+	 */
 	public void init() throws SQLException{		
 		if (isInitialized){
 			return;
@@ -71,10 +74,21 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 		}
 	}
 	
+	/**
+	 * Takes care of any clean up action when the Data Access Object 
+	 * is being garbage collected.
+	 */
 	protected void finalize() throws Throwable{
 		super.finalize();
 	}
 	
+	/**
+	 * Drop a table by the given *name* from the Sqlite database.
+	 *  
+	 * @param name The name of the table to be dropped.
+	 * @return Whether the operation was succesful.
+	 * @throws SQLException
+	 */
 	public Boolean dropTable(String name) throws SQLException{
 		Connection conn = null;
 		PreparedStatement stmt = null;
@@ -93,8 +107,8 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 	}
     
     /**
+     * Check whether the table with the given *name* exists in the Sqlite database.
      * 
-     * @author Malte Engelhardt
      * @param name The name of the db table whose existence is to be checked.
      * @return Whether the table with the supplied name exists in the db.
      * 
@@ -112,6 +126,11 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
         return exists;
     }
 	
+    /**
+     * Get a {@link Connection} object to talk to the Sqlite database.
+     * 
+     * @return The connection object.
+     */
 	public Connection getConnection(){
 		String connstr = "jdbc:sqlite:kontakte_db";
 		String user = "master";
@@ -130,12 +149,9 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 	}
 	
 	/**
-     * 
      * Creates an instance of a class implementing IEmailKontakt.
      * 
-     * @author Malte Engelhardt
-     * @return 
-     * 
+     * @return The newly created instance of IEmailKontakt.  
      */
     @Override
     public IEmailKontakt create() {
@@ -143,11 +159,13 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
     }
 		
 	/**
+	 * Get all instances of IEmailKontakt from the Sqlite database
+	 * that conform to the parameters *filters*, *orderBy* and *limit*.
 	 * 
-	 * @author Malte Engelhardt
-	 * @param params
-	 * @param orderBy
-	 * @param limit
+	 * @param filters An array of Filter instances, to be ANDed together 
+	 * 			in the SQL statement's WHERE clause.
+	 * @param orderBy The field(s) to sort on. DESC and ASC can be passed as well.
+	 * @param limit The limit for the result set. Pass 0 (zero) if unlimited.
 	 * @return Array of objects that implement IEmailKontakt.
 	 * 
 	 */
@@ -203,6 +221,13 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
         return objs.toArray(new IEmailKontakt[objs.size()]);
     }
     
+    /**
+     * Construct a string suitable for the construction of the SQL statement's
+     * WHERE clause.
+     * 
+     * @param filters An array of filters to be ANDed together.
+     * @return The WHERE clause.
+     */
     private String getWhereString(Filter[] filters){
 		StringBuilder sb = new StringBuilder();
 		
@@ -219,18 +244,33 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
         return sb.toString();
     }
 	
+    /**
+     * Pack one filter into an Array.
+     * 
+     * @param filter The Filter instance to be packed.
+     * @return
+     */
 	private Filter[] packFilter(Filter filter){
-		LinkedList<Filter> filters = 
-			new LinkedList<Filter>();
-		filters.add(filter);
-		return filters.toArray(new Filter[filters.size()]);
+		return new Filter[] { filter };
 	}
 	
+	/**
+	 * Return all IEmailKontakt instances from the Sqlite database.
+	 * 
+	 */
 	@Override
 	public IEmailKontakt[] select(){
 		return selectBase(null, "", 0);
 	}
 
+	/**
+     * Get the IEmailKontakt instance with the given *id*. If there is no 
+     * instance with the given id, NoEmailKontaktFoundException is raised.
+     * 
+     * @param id The id of the IEmailKontakt instance to be returned.
+     * @return The IEmailKontakt instance with the given id.
+     * @throws NoEmailKontaktFoundException
+	 */
     @Override
     public IEmailKontakt select(int id) throws NoEmailKontaktFoundException{		
     	
@@ -257,7 +297,7 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
      * @return Array of matching IEmailKontakt instances.
      */
     @Override
-    public IEmailKontakt[] select(String criterion){
+    public IEmailKontakt[] select(String criterion) {
 		IEmailKontakt[] objs = select();
 		List<IEmailKontakt> remaining = new LinkedList<IEmailKontakt>();
 		
@@ -287,6 +327,13 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 		return remaining.toArray(new IEmailKontakt[remaining.size()]);
     }
 	
+    /**
+     * Get the first entry from the backend. If there is no entry,
+     * raises NoEmailKontaktFoundExcepion.
+     * 
+     * @return The last IEmailKontakt instance.
+     * @throws NoEmailKontaktFoundException
+     */
     @Override
     public IEmailKontakt first() throws NoEmailKontaktFoundException {
 		IEmailKontakt[] objs = selectBase(null, "id ASC", 1);
@@ -298,6 +345,13 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 		return objs[0];
     }
 
+    /**
+     * Get the last entry from the backend. If there is no entry,
+     * raises NoEmailKontaktFoundExcepion.
+     * 
+     * @return The last IEmailKontakt instance.
+     * @throws NoEmailKontaktFoundException
+     */
     @Override
     public IEmailKontakt last() throws NoEmailKontaktFoundException{
         IEmailKontakt[] objs = selectBase(null, "id DESC", 1);
@@ -309,6 +363,9 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 		return objs[0];
     }
 
+    /**
+     * Delete the given instance from the backend.
+     */
     @Override
     public void delete(IEmailKontakt emailKontakt){
         Connection conn = null;
@@ -333,6 +390,14 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 		}
     }
 
+    /**
+     * Get the {@link IEmailKontakt} instance whose id is the next highest after
+     * the given *emailKontakt* instance. If there is no next {@link IEmailKontakt}
+     * {@link NoNextEmailKontaktFoundException} will be raised.
+     * 
+     * @return The next {@link IEmailKontakt} instance.
+     * @throws {@link NoNextEmailKontaktFoundException}
+     */
     @Override
     public IEmailKontakt next(IEmailKontakt emailKontakt) throws NoNextEmailKontaktFoundException{
         if (emailKontakt.getID() == 0){
@@ -352,6 +417,14 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 		return objs[0];
     }
 
+    /**
+     * Get the {@link IEmailKontakt} instance whose id is the next lowest after
+     * the given *emailKontakt* instance. If there is no previous {@link IEmailKontakt}
+     * {@link NoPreviousEmailKontaktFoundException} will be raised.
+     * 
+     * @return The next {@link IEmailKontakt} instance.
+     * @throws {@link NoPreviousEmailKontaktFoundException}
+     */
     @Override
     public IEmailKontakt previous(IEmailKontakt emailKontakt) throws NoPreviousEmailKontaktFoundException {
 		if (emailKontakt.getID() == 0){
@@ -371,6 +444,12 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 		return objs[0];
     }
 
+    /**
+     * Persist the given *emailKontakt* instance in the backend. If it was saved
+     * already and has an id != 0, this results in SQL UPDATE. Otherwise, 
+     * SQL INSERT and subsequent setting of the newly (auto-) created id on the 
+     * instance.
+     */
     @Override
     public void save(IEmailKontakt emailKontakt){
 		

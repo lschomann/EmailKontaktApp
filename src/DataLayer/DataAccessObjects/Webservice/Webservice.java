@@ -26,10 +26,22 @@ import Exceptions.NoNextEmailKontaktFoundException;
 import Exceptions.NoPreviousEmailKontaktFoundException;
 
 
-
+/**
+ * This class represents a web service to route requests to the appropriate
+ * DAO methods. It's methods can be consumed with a properly crafted request 
+ * to the URLs resulting from the '@Path' annotations. Return values of the various
+ * HTTP request handlers will be serialized to XML. See {@link EmailKontaktDaoWebservice} 
+ * for how to consume this service.
+ * 
+ * @author Malte Engelhardt
+ *
+ */
 @Path("objects")
 public class Webservice {
 	
+	/**
+	 * Test if service is alive.
+	 */
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
 	@Path("alive")
@@ -37,6 +49,15 @@ public class Webservice {
 		return "hallo welt";
 	}
 	
+	/**
+	 * Get an instance of IEmailKontakt by the given *id* and return in a serializable 
+	 * container instance ({@link EmailKontaktBean}). In case no instance
+	 * could be found, returns null, resulting in a HTTP 204 No Content response 
+	 * to the requesting client.
+	 * 
+	 * @param id The id to be looked up.
+	 * @return Serializer container with the found IEmailKontakt instance in it.
+	 */
 	@GET
 	@Produces(MediaType.APPLICATION_XML)
 	@Path("id/{id}")
@@ -61,6 +82,12 @@ public class Webservice {
 		}
 	}
 	
+	/**
+	 * Filter all IEmailKontakt instances by the given *criterion*. See method
+	 * EmailKontaktDaoSqlite.select(criterion) for details.
+	 * 
+	 * If no instances were found, returns HTTP 204 No Content.
+	 */
 	@GET
 	@Produces(MediaType.APPLICATION_XML)
 	@Path("filter/{criterion}")
@@ -80,6 +107,12 @@ public class Webservice {
 		return beans.toArray(new EmailKontaktBean[beans.size()]);
 	}
 	
+	/**
+	 * Returns all IEmailKontakt instances. See method
+	 * EmailKontaktDaoSqlite.select() for details.
+	 * 
+	 * If no instances were found, returns HTTP 204 No Content.
+	 */
 	@GET
 	@Produces(MediaType.APPLICATION_XML)
 	@Path("all")
@@ -100,6 +133,11 @@ public class Webservice {
 		return beans;
 	}
 
+	/**
+	 * See method EmailKontaktDaoSqlite.first for details.
+	 * 
+	 * If no instances were found, returns HTTP 204 No Content.
+	 */
 	@GET
 	@Produces(MediaType.APPLICATION_XML)
 	@Path("first")
@@ -118,6 +156,11 @@ public class Webservice {
 		return null;
 	}
 	
+	/**
+	 * See method EmailKontaktDaoSqlite.last for details.
+	 * 
+	 * If no instances were found, returns HTTP 204 No Content.
+	 */
 	@GET
 	@Produces(MediaType.APPLICATION_XML)
 	@Path("last")
@@ -136,6 +179,11 @@ public class Webservice {
 		return null;
 	}
 
+	/**
+	 * See method EmailKontaktDaoSqlite.next for details.
+	 * 
+	 * If no instances were found, returns HTTP 204 No Content.
+	 */
 	@POST
 	@Consumes(MediaType.APPLICATION_XML)
 	@Produces(MediaType.APPLICATION_XML)
@@ -155,6 +203,11 @@ public class Webservice {
 		return null;
 	}
 	
+	/**
+	 * See method EmailKontaktDaoSqlite.previous for details.
+	 * 
+	 * If no instances were found, returns HTTP 204 No Content.
+	 */
 	@POST
 	@Consumes(MediaType.APPLICATION_XML)
 	@Produces(MediaType.APPLICATION_XML)
@@ -174,6 +227,9 @@ public class Webservice {
 		return null;
 	}
 	
+	/**
+	 * See method EmailKontaktDaoSqlite.delete for details.
+	 */
 	@PUT
 	@Path("delete")
 	@Consumes(MediaType.APPLICATION_XML)
@@ -181,6 +237,9 @@ public class Webservice {
 		getDao().delete(bean.getContact());
 	}
 	
+	/**
+	 * See method EmailKontaktDaoSqlite.save for details.
+	 */
 	@POST
 	@Path("save")
 	@Consumes(MediaType.APPLICATION_XML)
@@ -191,6 +250,11 @@ public class Webservice {
 	}
 	
 	private EmailKontaktDaoSqlite dao;
+	
+	/**
+	 * Gets an initialized singleton instance of EmailKontaktDaoSqlite.
+	 * @return
+	 */
 	private EmailKontaktDaoSqlite getDao(){
 		if (dao == null){
 			dao = new EmailKontaktDaoSqlite();

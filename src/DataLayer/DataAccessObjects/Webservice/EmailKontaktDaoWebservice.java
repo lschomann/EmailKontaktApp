@@ -88,7 +88,11 @@ public class EmailKontaktDaoWebservice implements IEmailKontaktDAO{
     }
 
     /**
+     * Get all entries from the backend. If there are none, NoEmailKontaktFoundException
+     * will be raised.
      * 
+     * @return An array of IEmailKontakt instances.
+     * @throws NoEmailKontaktFoundException
      */
     @Override
     public IEmailKontakt[] select() throws NoEmailKontaktFoundException {
@@ -119,6 +123,14 @@ public class EmailKontaktDaoWebservice implements IEmailKontaktDAO{
     	return objs.toArray(new IEmailKontakt[objs.size()]);
     }
 
+    /**
+     * Get the IEmailKontakt instance with the given *id*. If there is no 
+     * instance with the given id, NoEmailKontaktFoundException is raised.
+     * 
+     * @param id The id of the IEmailKontakt instance to be returned.
+     * @return The IEmailKontakt instance with the given id.
+     * @throws NoEmailKontaktFoundException
+     */
     @Override
     public IEmailKontakt select(int id) throws NoEmailKontaktFoundException {
     	IEmailKontakt c = null;
@@ -144,6 +156,17 @@ public class EmailKontaktDaoWebservice implements IEmailKontaktDAO{
     	return c;
     }
     
+    /**
+     * Get an instance of all IEMailKontakt instances that satisfy the given *criterion*.
+     * All string fields (vorname, nachname, email) will be checked whether they _contain_
+     * *criterion*. If *criterion* can be converted to a number, the converted int value
+     * will be used to compare to the id field of the instance. The lookup on the id field
+     * has higher precedence than lookup on the other fields. If the result is empty,
+     * NoEmailKontaktFoundException will be raised.
+     * 
+     * @param criterion A string to looked up on each field of the IEmailKontakt instance.
+     * @return An array of IEmailKontakt instances.
+     */
     @Override
     public IEmailKontakt[] select(String criterion) throws NoEmailKontaktFoundException {
     	List<IEmailKontakt> objs = new LinkedList<IEmailKontakt>();
@@ -173,6 +196,13 @@ public class EmailKontaktDaoWebservice implements IEmailKontaktDAO{
     	return objs.toArray(new IEmailKontakt[objs.size()]);
     }
 
+    /**
+     * Get the first entry from the backend. If there is no entry,
+     * raises NoEmailKontaktFoundExcepion.
+     * 
+     * @return The last IEmailKontakt instance.
+     * @throws NoEmailKontaktFoundException
+     */
     @Override
     public IEmailKontakt first() throws NoEmailKontaktFoundException {
     	IEmailKontakt c = null;
@@ -193,6 +223,13 @@ public class EmailKontaktDaoWebservice implements IEmailKontaktDAO{
     	return c;
     }
 
+    /**
+     * Get the last entry from the backend. If there is no entry,
+     * raises NoEmailKontaktFoundExcepion.
+     * 
+     * @return The last IEmailKontakt instance.
+     * @throws NoEmailKontaktFoundException
+     */
     @Override
     public IEmailKontakt last() throws NoEmailKontaktFoundException {
     	IEmailKontakt c = null;
@@ -213,6 +250,9 @@ public class EmailKontaktDaoWebservice implements IEmailKontaktDAO{
     	return c;
     }
 
+    /**
+     * Delete the given instance from the backend.
+     */
     @Override
     public void delete(IEmailKontakt emailKontakt) {
     	try{
@@ -234,6 +274,14 @@ public class EmailKontaktDaoWebservice implements IEmailKontaktDAO{
     	}
     }
 
+    /**
+     * Get the {@link IEmailKontakt} instance whose id is the next highest after
+     * the given *emailKontakt* instance. If there is no next {@link IEmailKontakt}
+     * {@link NoNextEmailKontaktFoundException} will be raised.
+     * 
+     * @return The next {@link IEmailKontakt} instance.
+     * @throws {@link NoNextEmailKontaktFoundException}
+     */
     @Override
     public IEmailKontakt next(IEmailKontakt emailKontakt) throws NoNextEmailKontaktFoundException{
     	IEmailKontakt c = null;
@@ -257,6 +305,15 @@ public class EmailKontaktDaoWebservice implements IEmailKontaktDAO{
     	return c;
     }
 
+
+    /**
+     * Get the {@link IEmailKontakt} instance whose id is the next lowest after
+     * the given *emailKontakt* instance. If there is no previous {@link IEmailKontakt}
+     * {@link NoPreviousEmailKontaktFoundException} will be raised.
+     * 
+     * @return The next {@link IEmailKontakt} instance.
+     * @throws {@link NoPreviousEmailKontaktFoundException}
+     */
     @Override
     public IEmailKontakt previous(IEmailKontakt emailKontakt) throws NoPreviousEmailKontaktFoundException {
     	IEmailKontakt c = null;
@@ -280,6 +337,12 @@ public class EmailKontaktDaoWebservice implements IEmailKontaktDAO{
     	return c;
     }
 
+    /**
+     * Persist the given *emailKontakt* instance in the backend. If it was saved
+     * already and has an id != 0, this results in SQL UPDATE. Otherwise, 
+     * SQL INSERT and subsequent setting of the newly (auto-) created id on the 
+     * instance.
+     */
     @Override
     public void save(IEmailKontakt emailKontakt) {
     	try{

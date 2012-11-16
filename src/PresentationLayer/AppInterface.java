@@ -46,10 +46,6 @@ import Exceptions.NoPreviousEmailKontaktFoundException;
  * 
  * @author Lukas Schomann
  */
-/**
- * @author fa11engel
- *
- */
 public class AppInterface extends javax.swing.JFrame {
 
 	/**
@@ -297,10 +293,16 @@ public class AppInterface extends javax.swing.JFrame {
 		this.setSize(408, 258);
 	}// </editor-fold>//GEN-END:initComponents
 
+	/**
+	 * Handle the KeyTyped event of the *vorname_txt* text input widget.
+	 */
 	protected void email_txtKeyTyped(KeyEvent evt) {
 		this.startDirtyTimer();
 	}
 
+	/**
+	 * Handle the KeyTyped event of the *vorname_txt* text input widget.
+	 */
 	protected void name_txtKeyTyped(KeyEvent evt) {
 		this.startDirtyTimer();
 
@@ -308,15 +310,15 @@ public class AppInterface extends javax.swing.JFrame {
 
 	/**
 	 * Handle the KeyTyped event of the *vorname_txt* text input widget.
-	 * 
-	 * @param evt
 	 */
 	protected void vorname_txtKeyTyped(KeyEvent evt) {
 		this.startDirtyTimer();
 	}
 
 	/**
-	 * Start the dirtyTimer.
+	 * Start the dirtyTimer. It looks for whether any user input must trigger saving of the
+	 * currently displayed IEmailKontakt instance. This mechanism mainly exists to prevent
+	 * unnecessary backend accesses.
 	 */
 	private void startDirtyTimer() {
 		if (this.dirtyTimer == null) {
@@ -601,7 +603,7 @@ public class AppInterface extends javax.swing.JFrame {
 		return this.current_kontakt;
 	}
 
-	// Set the current contact to current_kontakt
+	// Set the current contact to k
 	private void setCurrent(IEmailKontakt k) {
 		this.current_kontakt = k;
 	}
@@ -715,11 +717,22 @@ public class AppInterface extends javax.swing.JFrame {
 		return search_txt;
 	}
 
+	/**
+	 * Handle the KeyTyped event of the search_txt text input field.
+	 * @param evt
+	 */
 	private void search_txtKeyTyped(KeyEvent evt) {
 		System.out.println("search_txt.keyPressed, event=" + evt);
 		this.startSearchTimer();
 	}
 
+	/**
+	 * Start the search timer. It will wait for 300 milli seconds, then begins the search.
+	 * If before reaching the 300 ms threshold the user inputs more search characters,
+	 * the timer will be reset. The result of the search will be set as the currently 
+	 * displayed IEmailKontakt on the form. If no objects were found, nothing changes on the
+	 * form.  
+	 */
 	private void startSearchTimer() {
 		if (searchTimer == null) {
 			final AppInterface self = this;
@@ -762,10 +775,18 @@ public class AppInterface extends javax.swing.JFrame {
 		this.searchTimer.restart();
 	}
 
+	/**
+	 * Display a status message. Currently implemented as stdout output.
+	 * @param msg
+	 */
 	private void showStatus(String msg) {
 		System.out.println(msg);
 	}
 
+	/**
+	 * 
+	 * @param evt
+	 */
 	private void thisWindowClosing(WindowEvent evt) {
 		System.out.println("this.windowClosing, event=" + evt);
 		// TODO add your code for this.windowClosing
