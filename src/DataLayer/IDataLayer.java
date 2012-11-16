@@ -1,10 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package DataLayer;
 
 /**
+ * Interface for EmailKontakt methods
  *
  * @author Lukas Schomann
  */
