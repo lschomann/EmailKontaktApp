@@ -4,20 +4,24 @@
  */
 package DataLayer.DataAccessObjects.Webservice;
 
+import java.sql.SQLException;
+
 import DataLayer.DataAccessObjects.IEmailKontaktDAO;
 import DataLayer.IDataLayer;
 
 /**
- *
+ * 
  * @author lschomann
  */
-public class DataLayerWebservice implements IDataLayer{
+public class DataLayerWebservice implements IDataLayer {
 
-    @Override
-    public IEmailKontaktDAO getEmailKontaktDao() {
-    	EmailKontaktDaoWebservice dao = new EmailKontaktDaoWebservice();
-        dao.init();
-        return dao;
-    }
-    
+	@Override
+	public IEmailKontaktDAO getEmailKontaktDao() {
+		EmailKontaktDaoWebservice dao = new EmailKontaktDaoWebservice();
+
+		dao.init();
+
+		return dao;
+	}
+
 }

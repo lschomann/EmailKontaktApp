@@ -1,5 +1,6 @@
 package DataLayer.DataAccessObjects.Webservice;
 
+import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -193,6 +194,12 @@ public class Webservice {
 	private EmailKontaktDaoSqlite getDao(){
 		if (dao == null){
 			dao = new EmailKontaktDaoSqlite();
+			try {
+				dao.init();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return dao;
 	}
