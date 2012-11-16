@@ -787,6 +787,7 @@ public class AppInterface extends javax.swing.JFrame {
 			try {
 				// If a previous entry exists
 				update(dao.previous(k));
+				
 			} catch (NoPreviousEmailKontaktFoundException f) {
 				// Create a new empty entry
 				update(this.getContact());
