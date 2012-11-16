@@ -91,32 +91,7 @@ public class EmailKontaktDaoWebservice implements IEmailKontaktDAO{
      * 
      */
     @Override
-    public IEmailKontakt[] select() {
-    	IEmailKontakt c = null;
-    	try{
-    		c = getResource().path("objects").path("all")
-											.accept(MediaType.APPLICATION_XML)
-											.get(EmailKontaktBean.class).getContact();
-    	}
-    	catch(UniformInterfaceException e){
-    		int status = e.getResponse().getStatus();
-    		if (status == 404){
-    			throw new NoEmailKontaktFoundException();
-    		} 
-    		else if (status == 400){
-    			// handle http Bad Request
-    			throw new NoEmailKontaktFoundException();
-    		} 
-    		else if (status == 204){
-    			// handle http No Content
-    			throw new NoEmailKontaktFoundException();
-    		}
-    	}
-    	return c;
-    }
-
-    @Override
-    public IEmailKontakt[] select(int id) throws NoEmailKontaktFoundException {
+    public IEmailKontakt[] select() throws NoEmailKontaktFoundException {
     	List<IEmailKontakt> objs = new LinkedList<IEmailKontakt>();
     	
     	try{
@@ -142,6 +117,31 @@ public class EmailKontaktDaoWebservice implements IEmailKontaktDAO{
     		}
     	}
     	return objs.toArray(new IEmailKontakt[objs.size()]);
+    }
+
+    @Override
+    public IEmailKontakt select(int id) throws NoEmailKontaktFoundException {
+    	IEmailKontakt c = null;
+    	try{
+    		c = getResource().path("objects").path("id").path(String.valueOf(id))
+											.accept(MediaType.APPLICATION_XML)
+											.get(EmailKontaktBean.class).getContact();
+    	}
+    	catch(UniformInterfaceException e){
+    		int status = e.getResponse().getStatus();
+    		if (status == 404){
+    			throw new NoEmailKontaktFoundException();
+    		} 
+    		else if (status == 400){
+    			// handle http Bad Request
+    			throw new NoEmailKontaktFoundException();
+    		} 
+    		else if (status == 204){
+    			// handle http No Content
+    			throw new NoEmailKontaktFoundException();
+    		}
+    	}
+    	return c;
     }
     
     @Override
