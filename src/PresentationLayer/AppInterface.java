@@ -6,6 +6,7 @@ package PresentationLayer;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
@@ -47,6 +48,10 @@ import Exceptions.NoPreviousEmailKontaktFoundException;
 /**
  * 
  * @author Lukas Schomann
+ */
+/**
+ * @author fa11engel
+ *
  */
 public class AppInterface extends javax.swing.JFrame {
 
@@ -100,6 +105,8 @@ public class AppInterface extends javax.swing.JFrame {
 				name_txtKeyTyped(evt);
 			}
 		});
+		GroupLayout layout = new GroupLayout((JComponent)getContentPane());
+		getContentPane().setLayout(layout);
 		email_txt = new javax.swing.JTextField();
 		email_txt.addFocusListener(new FocusAdapter() {
 			public void focusLost(FocusEvent evt) {
@@ -170,6 +177,67 @@ public class AppInterface extends javax.swing.JFrame {
 				}
 			});
 		}
+		layout.setVerticalGroup(layout.createSequentialGroup()
+			.addContainerGap()
+			.addComponent(header_lbl, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+			.addGap(26)
+			.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+			    .addComponent(getSearch_txt(), GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+			    .addComponent(prev_btn, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+			    .addComponent(id_txt, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+			    .addComponent(id_lbl, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+			    .addComponent(next_btn, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+			.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+			.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+			    .addComponent(vorname_txt, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+			    .addComponent(vorname_lbl, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+			.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+			.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+			    .addComponent(name_txt, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+			    .addComponent(name_lbl, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+			.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+			.addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+			    .addComponent(email_txt, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+			    .addComponent(email_lbl, GroupLayout.Alignment.BASELINE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+			.addContainerGap(20, 20));
+		layout.setHorizontalGroup(layout.createSequentialGroup()
+			.addContainerGap()
+			.addGroup(layout.createParallelGroup()
+			    .addGroup(layout.createSequentialGroup()
+			        .addGroup(layout.createParallelGroup()
+			            .addComponent(vorname_lbl, GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+			            .addGroup(layout.createSequentialGroup()
+			                .addGap(7)
+			                .addGroup(layout.createParallelGroup()
+			                    .addComponent(email_lbl, GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+			                    .addComponent(name_lbl, GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+			                    .addGroup(GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+			                        .addPreferredGap(email_lbl, id_lbl, LayoutStyle.ComponentPlacement.INDENT)
+			                        .addComponent(id_lbl, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+			                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)))
+			                .addGap(8)))
+			        .addGap(38)
+			        .addGroup(layout.createParallelGroup()
+			            .addGroup(layout.createSequentialGroup()
+			                .addGap(0, 0, Short.MAX_VALUE)
+			                .addComponent(email_txt, GroupLayout.PREFERRED_SIZE, 292, GroupLayout.PREFERRED_SIZE))
+			            .addGroup(layout.createSequentialGroup()
+			                .addGap(0, 0, Short.MAX_VALUE)
+			                .addComponent(name_txt, GroupLayout.PREFERRED_SIZE, 292, GroupLayout.PREFERRED_SIZE))
+			            .addGroup(layout.createSequentialGroup()
+			                .addGap(0, 0, Short.MAX_VALUE)
+			                .addComponent(vorname_txt, GroupLayout.PREFERRED_SIZE, 292, GroupLayout.PREFERRED_SIZE))
+			            .addGroup(GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+			                .addComponent(id_txt, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE)
+			                .addGap(56)
+			                .addComponent(prev_btn, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)
+			                .addComponent(next_btn, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE)
+			                .addGap(0, 26, Short.MAX_VALUE)
+			                .addComponent(getSearch_txt(), GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE))))
+			    .addGroup(GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+			        .addComponent(header_lbl, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+			        .addGap(0, 165, Short.MAX_VALUE)))
+			.addContainerGap());
 
 		file_menu.setText("File");
 
@@ -210,242 +278,6 @@ public class AppInterface extends javax.swing.JFrame {
 
 		setJMenuBar(menuBar);
 
-		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(
-				getContentPane());
-		getContentPane().setLayout(layout);
-		layout.setVerticalGroup(layout
-				.createSequentialGroup()
-				.addContainerGap()
-				.addComponent(header_lbl, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGroup(
-						layout.createParallelGroup()
-								.addGroup(
-										GroupLayout.Alignment.LEADING,
-										layout.createParallelGroup(
-												GroupLayout.Alignment.BASELINE)
-												.addComponent(
-														prev_btn,
-														GroupLayout.Alignment.BASELINE,
-														GroupLayout.PREFERRED_SIZE,
-														26,
-														GroupLayout.PREFERRED_SIZE)
-												.addComponent(
-														next_btn,
-														GroupLayout.Alignment.BASELINE,
-														GroupLayout.PREFERRED_SIZE,
-														GroupLayout.PREFERRED_SIZE,
-														GroupLayout.PREFERRED_SIZE))
-								.addGroup(
-										layout.createSequentialGroup()
-												.addPreferredGap(
-														LayoutStyle.ComponentPlacement.RELATED)
-												.addGroup(
-														layout.createParallelGroup(
-																GroupLayout.Alignment.BASELINE)
-																.addComponent(
-																		getSearch_txt(),
-																		GroupLayout.Alignment.BASELINE,
-																		GroupLayout.PREFERRED_SIZE,
-																		GroupLayout.PREFERRED_SIZE,
-																		GroupLayout.PREFERRED_SIZE)
-																.addComponent(
-																		getSearch_lbl(),
-																		GroupLayout.Alignment.BASELINE,
-																		GroupLayout.PREFERRED_SIZE,
-																		14,
-																		GroupLayout.PREFERRED_SIZE))))
-				.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-				.addGroup(
-						layout.createParallelGroup(
-								GroupLayout.Alignment.BASELINE)
-								.addComponent(id_txt,
-										GroupLayout.Alignment.BASELINE,
-										GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(id_lbl,
-										GroupLayout.Alignment.BASELINE,
-										GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-				.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-				.addGroup(
-						layout.createParallelGroup(
-								GroupLayout.Alignment.BASELINE)
-								.addComponent(vorname_txt,
-										GroupLayout.Alignment.BASELINE,
-										GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(vorname_lbl,
-										GroupLayout.Alignment.BASELINE,
-										GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-				.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-				.addGroup(
-						layout.createParallelGroup(
-								GroupLayout.Alignment.BASELINE)
-								.addComponent(name_txt,
-										GroupLayout.Alignment.BASELINE,
-										GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(name_lbl,
-										GroupLayout.Alignment.BASELINE,
-										GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-				.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-				.addGroup(
-						layout.createParallelGroup(
-								GroupLayout.Alignment.BASELINE)
-								.addComponent(email_txt,
-										GroupLayout.Alignment.BASELINE,
-										GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(email_lbl,
-										GroupLayout.Alignment.BASELINE,
-										GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-				.addContainerGap());
-		layout.setHorizontalGroup(layout
-				.createSequentialGroup()
-				.addContainerGap()
-				.addGroup(
-						layout.createParallelGroup()
-								.addGroup(
-										layout.createSequentialGroup()
-												.addGroup(
-														layout.createParallelGroup()
-																.addComponent(
-																		vorname_lbl,
-																		GroupLayout.Alignment.LEADING,
-																		GroupLayout.PREFERRED_SIZE,
-																		GroupLayout.PREFERRED_SIZE,
-																		GroupLayout.PREFERRED_SIZE)
-																.addGroup(
-																		GroupLayout.Alignment.LEADING,
-																		layout.createSequentialGroup()
-																				.addComponent(
-																						getSearch_lbl(),
-																						0,
-																						40,
-																						Short.MAX_VALUE)
-																				.addGap(6))
-																.addGroup(
-																		layout.createSequentialGroup()
-																				.addGap(7)
-																				.addGroup(
-																						layout.createParallelGroup()
-																								.addComponent(
-																										email_lbl,
-																										GroupLayout.Alignment.LEADING,
-																										GroupLayout.PREFERRED_SIZE,
-																										GroupLayout.PREFERRED_SIZE,
-																										GroupLayout.PREFERRED_SIZE)
-																								.addComponent(
-																										name_lbl,
-																										GroupLayout.Alignment.LEADING,
-																										GroupLayout.PREFERRED_SIZE,
-																										GroupLayout.PREFERRED_SIZE,
-																										GroupLayout.PREFERRED_SIZE)
-																								.addGroup(
-																										GroupLayout.Alignment.LEADING,
-																										layout.createSequentialGroup()
-																												.addPreferredGap(
-																														email_lbl,
-																														id_lbl,
-																														LayoutStyle.ComponentPlacement.INDENT)
-																												.addComponent(
-																														id_lbl,
-																														GroupLayout.PREFERRED_SIZE,
-																														GroupLayout.PREFERRED_SIZE,
-																														GroupLayout.PREFERRED_SIZE)
-																												.addPreferredGap(
-																														LayoutStyle.ComponentPlacement.RELATED)))
-																				.addGap(8)))
-												.addPreferredGap(
-														LayoutStyle.ComponentPlacement.RELATED)
-												.addGroup(
-														layout.createParallelGroup()
-																.addGroup(
-																		layout.createSequentialGroup()
-																				.addComponent(
-																						email_txt,
-																						GroupLayout.PREFERRED_SIZE,
-																						200,
-																						GroupLayout.PREFERRED_SIZE)
-																				.addGap(0,
-																						0,
-																						Short.MAX_VALUE))
-																.addGroup(
-																		layout.createSequentialGroup()
-																				.addComponent(
-																						name_txt,
-																						GroupLayout.PREFERRED_SIZE,
-																						200,
-																						GroupLayout.PREFERRED_SIZE)
-																				.addGap(0,
-																						0,
-																						Short.MAX_VALUE))
-																.addGroup(
-																		layout.createSequentialGroup()
-																				.addComponent(
-																						vorname_txt,
-																						GroupLayout.PREFERRED_SIZE,
-																						200,
-																						GroupLayout.PREFERRED_SIZE)
-																				.addGap(0,
-																						0,
-																						Short.MAX_VALUE))
-																.addGroup(
-																		GroupLayout.Alignment.LEADING,
-																		layout.createSequentialGroup()
-																				.addGroup(
-																						layout.createParallelGroup()
-																								.addComponent(
-																										getSearch_txt(),
-																										GroupLayout.Alignment.LEADING,
-																										GroupLayout.PREFERRED_SIZE,
-																										59,
-																										GroupLayout.PREFERRED_SIZE)
-																								.addGroup(
-																										GroupLayout.Alignment.LEADING,
-																										layout.createSequentialGroup()
-																												.addComponent(
-																														id_txt,
-																														GroupLayout.PREFERRED_SIZE,
-																														30,
-																														GroupLayout.PREFERRED_SIZE)
-																												.addGap(29)))
-																				.addGap(47)
-																				.addComponent(
-																						prev_btn,
-																						GroupLayout.PREFERRED_SIZE,
-																						42,
-																						GroupLayout.PREFERRED_SIZE)
-																				.addComponent(
-																						next_btn,
-																						GroupLayout.PREFERRED_SIZE,
-																						39,
-																						GroupLayout.PREFERRED_SIZE)
-																				.addGap(0,
-																						13,
-																						Short.MAX_VALUE))))
-								.addGroup(
-										GroupLayout.Alignment.LEADING,
-										layout.createSequentialGroup()
-												.addComponent(
-														header_lbl,
-														GroupLayout.PREFERRED_SIZE,
-														GroupLayout.PREFERRED_SIZE,
-														GroupLayout.PREFERRED_SIZE)
-												.addGap(0, 47, Short.MAX_VALUE)))
-				.addContainerGap(38, 38));
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent evt) {
 				thisWindowClosing(evt);
@@ -465,7 +297,7 @@ public class AppInterface extends javax.swing.JFrame {
 		});
 
 		pack();
-		this.setSize(316, 258);
+		this.setSize(408, 258);
 	}// </editor-fold>//GEN-END:initComponents
 
 	protected void email_txtKeyTyped(KeyEvent evt) {
@@ -477,10 +309,18 @@ public class AppInterface extends javax.swing.JFrame {
 
 	}
 
+	/**
+	 * Handle the KeyTyped event of the *vorname_txt* text input widget.
+	 * 
+	 * @param evt
+	 */
 	protected void vorname_txtKeyTyped(KeyEvent evt) {
 		this.startDirtyTimer();
 	}
 
+	/**
+	 * Start the dirtyTimer.
+	 */
 	private void startDirtyTimer() {
 		if (this.dirtyTimer == null) {
 			final AppInterface self = this;
@@ -558,6 +398,11 @@ public class AppInterface extends javax.swing.JFrame {
 		});
 	}
 
+	/**
+	 * Handle the MouseClicked event of the *next_btn* browse button.
+	 * 
+	 * @param evt
+	 */
 	private void next_btnMouseClicked(MouseEvent evt) {
 		System.out.println("next_btn mouseClicked");
 		try {
@@ -576,6 +421,12 @@ public class AppInterface extends javax.swing.JFrame {
 		}
 	}
 
+	/**
+	 * Handle the MouseClicked event of the *prev_btn* browse button.
+	 * 
+	 * @param evt
+	 * @throws NoPreviousEmailKontaktFoundException
+	 */
 	private void prev_btnMouseClicked(MouseEvent evt)
 			throws NoPreviousEmailKontaktFoundException {
 		System.out.println("prev_btn mouseClicked");
@@ -595,6 +446,12 @@ public class AppInterface extends javax.swing.JFrame {
 		}
 	}
 
+	/**
+	 * Handle the WindowOpened event of the form.
+	 * 
+	 * @param evt
+	 * @throws NoEmailKontaktFoundException
+	 */
 	private void thisWindowOpened(WindowEvent evt)
 			throws NoEmailKontaktFoundException {
 		System.out.println("Window opend");
@@ -612,8 +469,15 @@ public class AppInterface extends javax.swing.JFrame {
 			prev_btn.setEnabled(false);
 		}
 		prev_btn.setEnabled(false);
+		this.vorname_txt.requestFocusInWindow();
 	}
 
+	/**
+	 * Handle the ActionPerformed event of menu entry "Menu -> Quit"
+	 * 
+	 * @param evt
+	 * @throws NoEmailKontaktFoundException
+	 */
 	private void end_programActionPerformed(ActionEvent evt)
 			throws NoEmailKontaktFoundException {
 		System.out.println("end_program actionPerformed");
@@ -621,6 +485,9 @@ public class AppInterface extends javax.swing.JFrame {
 		onExit();
 	}
 
+	/**
+	 * Handle closing of the form.
+	 */
 	private void onExit() {
 		if (isDirty) {
 			IEmailKontakt c = getContact();
@@ -630,6 +497,11 @@ public class AppInterface extends javax.swing.JFrame {
 		System.exit(0);
 	}
 
+	/**
+	 * Handle the ActionPerformed event on the menu entry "Edit -> New".
+	 * 
+	 * @param evt
+	 */
 	private void edit_new_entryActionPerformed(ActionEvent evt) {
 		System.out.println("edit_new_entry actionPerformed");
 
@@ -638,7 +510,12 @@ public class AppInterface extends javax.swing.JFrame {
 		prev_btn.setEnabled(true);
 	}
 
-	// Help methods
+	/**
+	 * Handles the creation and subsequent display on the form of a
+	 * new IEmailKontakt instance.
+	 * 
+	 * @return a newly created IEmailKontakt instance.
+	 */
 	private IEmailKontakt create_new_entry() {
 
 		IEmailKontakt k = dao.create();
@@ -647,12 +524,18 @@ public class AppInterface extends javax.swing.JFrame {
 		return k;
 	}
 
+	/**
+	 * Set browse buttons to appropriate *enabled* state according to 
+	 * specified button identifier *btn*. 
+	 * 
+	 * @param btn true => next_btn, false => prev_btn.
+	 */
 	private void btn_disable_handler(Boolean btn) {
 
 		// If btn = 1 => Next Button pressed
 		if (btn) {
 			try {
-				update(dao.next(getCurrent()));
+				dao.next(getCurrent());
 				prev_btn.setEnabled(true); // Enable previous button
 				try {
 					// If no next element exists...
@@ -664,13 +547,14 @@ public class AppInterface extends javax.swing.JFrame {
 			} catch (NoNextEmailKontaktFoundException e) {
 				showStatus(String.format("%s%s", e.getClass(),
 						(e.getMessage() == null ? "" : " : " + e.getMessage())));
+				next_btn.setEnabled(false);
 			}
 		}
 
 		// If btn = 0 => Previous Button pressed
 		else {
 			try {
-				update(dao.next(getCurrent()));
+				dao.next(getCurrent());
 				next_btn.setEnabled(true); // Enable previous button
 				try {
 					// If no next element exists...
@@ -682,6 +566,7 @@ public class AppInterface extends javax.swing.JFrame {
 			} catch (NoNextEmailKontaktFoundException e) {
 				showStatus(String.format("%s%s", e.getClass(),
 						(e.getMessage() == null ? "" : " : " + e.getMessage())));
+				prev_btn.setEnabled(false);
 			}
 		}
 
@@ -787,7 +672,6 @@ public class AppInterface extends javax.swing.JFrame {
 			try {
 				// If a previous entry exists
 				update(dao.previous(k));
-				
 			} catch (NoPreviousEmailKontaktFoundException f) {
 				// Create a new empty entry
 				update(this.getContact());
@@ -795,6 +679,23 @@ public class AppInterface extends javax.swing.JFrame {
 		} finally {
 			// Delete the selected entry from database
 			dao.delete(k);
+			try {
+				dao.previous(getCurrent());
+			} catch (NoPreviousEmailKontaktFoundException ex) {
+				if (prev_btn.isEnabled()){
+					prev_btn.setEnabled(false);
+				}
+			}
+			
+			try {
+				dao.next(getCurrent());
+			} catch (NoNextEmailKontaktFoundException e) {
+				if (next_btn.isEnabled()){
+					next_btn.setEnabled(false);
+				}
+			}
+			
+			this.vorname_txt.requestFocusInWindow();
 		}
 
 	}
@@ -802,6 +703,12 @@ public class AppInterface extends javax.swing.JFrame {
 	private JTextField getSearch_txt() {
 		if (search_txt == null) {
 			search_txt = new JTextField();
+			search_txt.setText("Suchen ...");
+			search_txt.addFocusListener(new FocusAdapter() {
+				public void focusGained(FocusEvent evt) {
+					search_txtFocusGained(evt);
+				}
+			});
 			search_txt.addKeyListener(new KeyAdapter() {
 				public void keyTyped(KeyEvent evt) {
 					search_txtKeyTyped(evt);
@@ -809,14 +716,6 @@ public class AppInterface extends javax.swing.JFrame {
 			});
 		}
 		return search_txt;
-	}
-
-	private JLabel getSearch_lbl() {
-		if (search_lbl == null) {
-			search_lbl = new JLabel();
-			search_lbl.setText("Suchen:");
-		}
-		return search_lbl;
 	}
 
 	private void search_txtKeyTyped(KeyEvent evt) {
@@ -837,6 +736,21 @@ public class AppInterface extends javax.swing.JFrame {
 						IEmailKontakt[] objs = dao.select(searchText);
 						if (objs.length > 0) {
 							self.update(objs[0]);
+							try{
+								dao.next(getCurrent());
+								self.next_btn.setEnabled(true);
+							}
+							catch(NoNextEmailKontaktFoundException e){
+								self.next_btn.setEnabled(false);
+							}
+							
+							try{
+								dao.previous(getCurrent());
+								self.prev_btn.setEnabled(true);
+							}
+							catch(NoPreviousEmailKontaktFoundException e){
+								self.prev_btn.setEnabled(false);
+							}
 						}
 					} catch (NoEmailKontaktFoundException e) {
 						// pass
@@ -859,6 +773,12 @@ public class AppInterface extends javax.swing.JFrame {
 		System.out.println("this.windowClosing, event=" + evt);
 		// TODO add your code for this.windowClosing
 	}
+	
+	private void search_txtFocusGained(FocusEvent evt) {
+		System.out.println("search_txt.focusGained, event="+evt);
+		this.search_txt.setSelectionStart(0);
+		this.search_txt.setSelectionEnd((this.search_txt.getText() != null ? this.search_txt.getText().length() : 0));
+	}
 
 	// Variables declaration - do not modify//GEN-BEGIN:variables
 	private javax.swing.JLabel email_lbl;
@@ -869,7 +789,6 @@ public class AppInterface extends javax.swing.JFrame {
 	private javax.swing.JTextField id_txt;
 	private javax.swing.JMenu jMenu2;
 	private javax.swing.JMenuBar menuBar;
-	private JLabel search_lbl;
 	private JTextField search_txt;
 	private JMenuItem delete_entry;
 	private JMenuItem end_program;

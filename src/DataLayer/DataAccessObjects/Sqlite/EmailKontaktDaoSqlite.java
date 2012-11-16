@@ -277,9 +277,9 @@ public class EmailKontaktDaoSqlite implements IEmailKontaktDAO{
 				continue;
 			}
 			
-			if (o.getNachname().toLowerCase().contains(crit) 
-					|| o.getVorname().toLowerCase().contains(crit) 
-					|| o.getEmail().toLowerCase().contains(crit)){
+			if ((o.getNachname() == null ? "" : o.getNachname()).toLowerCase().contains(crit) 
+					|| (o.getVorname() == null ? "" : o.getVorname()).toLowerCase().contains(crit) 
+					|| (o.getEmail() == null ? "" : o.getEmail()).toLowerCase().contains(crit)){
 				remaining.add(o);
 			}
 		}
