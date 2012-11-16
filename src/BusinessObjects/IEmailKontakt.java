@@ -1,12 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package BusinessObjects;
 
 /**
+ * Interface for EmailKontakt methods
  *
- * @author lschomann
+ * @author Lukas Schomann
  */
 public interface IEmailKontakt {
     public int getID();

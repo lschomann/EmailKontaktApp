@@ -1,23 +1,23 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package DataLayer.DataAccessObjects.Webservice;
 
 import DataLayer.DataAccessObjects.IEmailKontaktDAO;
 import DataLayer.IDataLayer;
 
 /**
+ * This is the DataLayerWebservice object providing the getEmailKontaktDao method for webservice. 
  * 
- * @author lschomann
+ * @author Lukas Schomann
+ * @author Malte Engelhardt
  */
 public class DataLayerWebservice implements IDataLayer {
 
+	/**
+	 * This method creates a new EmaiKontaktDaoWebservice object which initializes the Webservice settings.
+	 */
 	@Override
 	public IEmailKontaktDAO getEmailKontaktDao() {
 		EmailKontaktDaoWebservice dao = new EmailKontaktDaoWebservice();
-
-		dao.init();
 
 		return dao;
 	}

@@ -72,6 +72,7 @@ public class EmailKontaktDaoWebservice implements IEmailKontaktDAO{
 	 * 
 	 * @return The async web resource object, representing the web service accessor.
 	 */
+	@SuppressWarnings("unused")
 	private AsyncWebResource getAsyncResource(){ 
 		return Client.create().asyncResource(ServerHelper.SERVICE_URL);
 	}
