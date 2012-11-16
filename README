@@ -1,0 +1,13 @@
+EmailVerwaltungApp
+
+geschrieben von Lukas Schomann, Mike Ritter und Malte Engelhardt.
+
+Das Projekt kann ganz simpel in Eclipse über die Import-Funktion geöffnet 
+werden.
+
+Um das Backend umzustellen, bitte den Eintrag in der Datei 'settings.xml' 
+ändern. Zur Auswahl stehen 'sqlite' und 'webservice'.
+
+Falls 'webservice' als Backend gewählt wurde, erhöht sich die Startzeit 
+signifikant (bis zu 10 Sekunden auf den langsamen Schulrechnern).
+
