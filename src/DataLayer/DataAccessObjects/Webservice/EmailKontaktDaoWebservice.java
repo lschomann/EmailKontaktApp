@@ -92,14 +92,9 @@ public class EmailKontaktDaoWebservice implements IEmailKontaktDAO{
      */
     @Override
     public IEmailKontakt[] select() {
-    	throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public IEmailKontakt select(int id) throws NoEmailKontaktFoundException {
     	IEmailKontakt c = null;
     	try{
-    		c = getResource().path("objects").path("id").path(String.valueOf(id))
+    		c = getResource().path("objects").path("all")
 											.accept(MediaType.APPLICATION_XML)
 											.get(EmailKontaktBean.class).getContact();
     	}
@@ -118,6 +113,35 @@ public class EmailKontaktDaoWebservice implements IEmailKontaktDAO{
     		}
     	}
     	return c;
+    }
+
+    @Override
+    public IEmailKontakt[] select(int id) throws NoEmailKontaktFoundException {
+    	List<IEmailKontakt> objs = new LinkedList<IEmailKontakt>();
+    	
+    	try{
+    		EmailKontaktBean[] beans = getResource().path("objects").path("all")
+													.accept(MediaType.APPLICATION_XML)
+													.get(EmailKontaktBean[].class);
+    		for(EmailKontaktBean bean: beans){
+    			objs.add(bean.getContact());
+    		}
+    	}
+    	catch(UniformInterfaceException e){
+    		int status = e.getResponse().getStatus();
+    		if (status == 404){
+    			throw new NoEmailKontaktFoundException();
+    		} 
+    		else if (status == 400){
+    			// handle http Bad Request
+    			throw new NoEmailKontaktFoundException();
+    		} 
+    		else if (status == 204){
+    			// handle http No Content
+    			throw new NoEmailKontaktFoundException();
+    		}
+    	}
+    	return objs.toArray(new IEmailKontakt[objs.size()]);
     }
     
     @Override
