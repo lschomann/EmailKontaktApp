@@ -7,11 +7,8 @@ package PresentationLayer;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.LayoutStyle;
-import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.Timer;
 

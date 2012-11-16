@@ -3,8 +3,8 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="utils/sqlitejdbc-v056.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="H:/Eigene Dateien/anwendungsentwicklung/EmailKontaktVerwaltung/EmailKontaktApp/utils/jsr311-api-1.1.jar"/>
-	<classpathentry kind="lib" path="H:/Eigene Dateien/anwendungsentwicklung/EmailKontaktVerwaltung/EmailKontaktApp/utils/asm-3.1.jar"/>
-	<classpathentry kind="lib" path="H:/Eigene Dateien/anwendungsentwicklung/EmailKontaktVerwaltung/EmailKontaktApp/utils/jersey-bundle-1.8.jar"/>
+	<classpathentry kind="lib" path="utils/asm-3.1.jar"/>
+	<classpathentry kind="lib" path="utils/jersey-bundle-1.8.jar"/>
+	<classpathentry kind="lib" path="utils/jsr311-api-1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

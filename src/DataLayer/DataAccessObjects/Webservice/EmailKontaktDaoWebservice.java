@@ -10,11 +10,8 @@ import javax.ws.rs.core.MediaType;
 
 import com.sun.jersey.api.client.AsyncWebResource;
 import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.client.config.ClientConfig;
-import com.sun.jersey.api.client.config.DefaultClientConfig;
 
 import BusinessObjects.IEmailKontakt;
 import DataLayer.BusinessObjects.EmailKontakt;
@@ -24,14 +21,21 @@ import Exceptions.NoNextEmailKontaktFoundException;
 import Exceptions.NoPreviousEmailKontaktFoundException;
 
 /**
+ * This implementation of the IEmailKontaktDAO interface provides the
+ * ability to communicate with a web service. The web service will be
+ * started on localhost if it can't be found. 
  *
  * @author Lukas Schomann
+ * @author Malte Engelhardt
  */
 public class EmailKontaktDaoWebservice implements IEmailKontaktDAO{
 
 	private WebResource resource;
 	
 	
+	/**
+	 * Initializes the Data Access Object.
+	 */
 	public void init(){
 		// just for testing: set up local server
 		if (!ServerHelper.serverResponds(ServerHelper.SERVICE_URL + "/objects/alive")){
@@ -39,11 +43,21 @@ public class EmailKontaktDaoWebservice implements IEmailKontaktDAO{
 		}
 	}
 	
+	/**
+	 * Takes care of any clean up action when the Data Access Object 
+	 * is being garbage collected.
+	 */
 	protected void finalize() throws Throwable{
 		ServerHelper.StopLocalServer();
 		super.finalize();
 	}
 	
+	/**
+	 * Constructs a singleton instance of the jersey.api.client.WebResource class
+	 * to be used for sending requests to the web service.
+	 * 
+	 * @return The web resource object, representing the web service accessor.
+	 */
 	private WebResource getResource(){
 		if (resource == null){
 			resource = Client.create().resource(ServerHelper.SERVICE_URL);
@@ -51,15 +65,31 @@ public class EmailKontaktDaoWebservice implements IEmailKontaktDAO{
 		return resource;
 	}
 	
+	/**
+	 * Constructs a singleton instance of the jersey.api.client.AsyncWebResource class
+	 * to be used for sending requests to the web service. As the name implies this is
+	 * the asynchronous version of *this.getResource()*.
+	 * 
+	 * @return The async web resource object, representing the web service accessor.
+	 */
 	private AsyncWebResource getAsyncResource(){ 
 		return Client.create().asyncResource(ServerHelper.SERVICE_URL);
 	}
 	
+	/**
+	 * Constructs a new IEmailKontakt instance without saving it in the backend.
+	 * The instance will have all it's fields initialized with default values.
+	 * 
+	 * @return The newly created IEmailKontakt instance.
+	 */
     @Override
     public IEmailKontakt create() {
     	return new EmailKontakt(0, null, null, null); 
     }
 
+    /**
+     * 
+     */
     @Override
     public IEmailKontakt[] select() {
     	throw new UnsupportedOperationException("Not supported yet.");
